@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Guillermo Bastos Ribas - Data Scientist</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -15,16 +21,53 @@
               accent: "#8b5cf6",
               dark: "#0f172a",
               light: "#f8fafc",
+              python: "#3776AB",
+              typescript: "#3178C6",
+              json: "#F7DF1E",
+              yaml: "#CB171E",
             },
           },
         },
       };
     </script>
+    <style>
+      .code-header {
+        font-family: 'Courier New', monospace;
+      }
+      .language-tab.active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 0;
+      }
+      .code-block {
+        border-radius: 0 0 1rem 1rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+      }
+      .hljs {
+        background: transparent !important;
+        padding: 0 !important;
+      }
+      pre {
+        margin: 0 !important;
+      }
+      .syntax-key {
+        color: #ff6b6b;
+      }
+      .syntax-string {
+        color: #98c379;
+      }
+      .syntax-number {
+        color: #d19a66;
+      }
+      .syntax-comment {
+        color: #5c6370;
+        font-style: italic;
+      }
+    </style>
   </head>
   <body
     class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen py-8 px-4"
   >
-    <!-- Cambio principal: max-w-6xl en lugar de max-w-5xl -->
     <div class="max-w-6xl mx-auto">
       <!-- Header -->
       <header
@@ -43,6 +86,71 @@
           <p class="text-xl text-cyan-100 mb-8 font-light">
             Data Scientist & Desarrollador Full Stack
           </p>
+          
+          <!-- Selector de formato CV -->
+          <div class="mb-8 bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+            <h3 class="text-lg font-semibold mb-4 text-white">🎮 Selecciona formato del CV:</h3>
+            <div class="flex flex-wrap gap-3">
+              <button 
+                onclick="switchCVFormat('html')" 
+                class="format-btn px-5 py-3 rounded-xl font-medium transition-all duration-300 bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg hover:shadow-xl active:scale-95"
+              >
+                <span class="flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 17.56l4.07-1.13.55-6.1H9.38L9.2 8.3h7.6l.2-1.99H7l.56 6.01h6.89l-.23 2.58-2.22.6-2.22-.6-.14-1.66h-2l.29 3.19L12 17.56M4.07 3h15.86L18.5 19.2 12 21l-6.5-1.8L4.07 3z"/>
+                  </svg>
+                  HTML (Original)
+                </span>
+              </button>
+              <button 
+                onclick="switchCVFormat('json')" 
+                class="format-btn px-5 py-3 rounded-xl font-medium transition-all duration-300 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-800 shadow-lg hover:shadow-xl active:scale-95"
+              >
+                <span class="flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M7,18A1,1 0 0,0 8,19H16V18H14V17H16V16H14V15H16V14H14V13H16V12H14V11H16V10H14V9H16V8H14V7H16V6H14V5H16V4H8A1,1 0 0,0 7,5V6H9V7H7V8H9V9H7V10H9V11H7V12H9V13H7V14H9V15H7V16H9V17H7V18Z"/>
+                  </svg>
+                  JSON
+                </span>
+              </button>
+              <button 
+                onclick="switchCVFormat('yaml')" 
+                class="format-btn px-5 py-3 rounded-xl font-medium transition-all duration-300 bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg hover:shadow-xl active:scale-95"
+              >
+                <span class="flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18,20H14V18H15V16H14V14H16V15H18V10H16V11H14V9H18A2,2 0 0,1 20,11V12H22V14H20V16H22V18H20V20A2,2 0 0,1 18,22H14V20M6,20A2,2 0 0,1 4,18V16H6V18H8V12H4V18A2,2 0 0,1 6,20M12,10V12H9V14H12V16H9V22H7V16H5V14H7V12H5V10H7V4H9V10H12M14,6H16V4H14V6M16,6H18V8H16V6M14,8H16V10H14V8M18,8H20V6H18V8M18,4H20V2H18V4M14,2H16V4H14V2M20,4H22V2H20V4Z"/>
+                  </svg>
+                  YAML
+                </span>
+              </button>
+              <button 
+                onclick="switchCVFormat('python')" 
+                class="format-btn px-5 py-3 rounded-xl font-medium transition-all duration-300 bg-gradient-to-r from-python to-blue-800 text-white shadow-lg hover:shadow-xl active:scale-95"
+              >
+                <span class="flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9.585 11.692h4.328s2.432.039 2.432-2.35V5.391S16.714 3 11.936 3C7.362 3 7.647 4.983 7.647 4.983l.006 2.055h4.363v.617H5.92s-2.927-.332-2.927 4.282 2.555 4.45 2.555 4.45h1.524v-2.141s-.083-2.554 2.513-2.554zm-.056-5.74a.784.784 0 01-.785.78.78.78 0 110-1.56.784.784 0 01.785.78z"/>
+                    <path d="M18.452 7.532h-1.524v2.141s.083 2.554-2.513 2.554h-4.328s-2.432-.04-2.432 2.35v3.951s-.369 2.391 4.409 2.391c4.573 0 4.288-1.983 4.288-1.983l-.006-2.054h-4.363v-.617h6.094s2.927.332 2.927-4.282-2.555-4.451-2.555-4.451zm-3.981 10.436a.784.784 0 01.785-.78.78.78 0 110 1.56.784.784 0 01-.785-.78z"/>
+                  </svg>
+                  Python
+                </span>
+              </button>
+              <button 
+                onclick="switchCVFormat('typescript')" 
+                class="format-btn px-5 py-3 rounded-xl font-medium transition-all duration-300 bg-gradient-to-r from-typescript to-blue-900 text-white shadow-lg hover:shadow-xl active:scale-95"
+              >
+                <span class="flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3,3H21V21H3V3M13.71,17.86C14.21,18.84 15.22,19.59 16.8,19.59C18.4,19.59 19.6,18.76 19.6,17.23C19.6,15.82 18.79,15.19 17.35,14.57L16.93,14.39C16.2,14.08 15.89,13.87 15.89,13.37C15.89,12.96 16.2,12.64 16.7,12.64C17.18,12.64 17.5,12.85 17.79,13.37L19.1,12.5C18.55,11.54 17.77,11.17 16.7,11.17C15.19,11.17 14.22,12.13 14.22,13.4C14.22,14.78 15.03,15.43 16.25,15.95L16.67,16.13C17.45,16.47 17.91,16.68 17.91,17.26C17.91,17.74 17.46,18.09 16.76,18.09C15.93,18.09 15.45,17.66 15.09,17.06L13.71,17.86M13,11.25H8V12.75H9.5V20H11.25V12.75H13V11.25Z"/>
+                  </svg>
+                  TypeScript
+                </span>
+              </button>
+            </div>
+            <p class="text-sm text-cyan-100 mt-4">✨ ¡Elige un formato y ve mi CV transformado en código!</p>
+          </div>
+
           <div class="flex flex-wrap gap-4 text-sm">
             <a
               href="mailto:bastosribasguillermo@gmail.com"
@@ -76,215 +184,20 @@
         </div>
       </header>
 
-      <!-- Main Content -->
-      <div class="space-y-8">
-        <!-- Resumen -->
-        <section
-          class="bg-white rounded-2xl shadow-lg p-10 border border-slate-200"
-        >
-          <div class="flex items-center gap-4 mb-8">
-            <div
-              class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center"
-            >
-              <svg
-                class="w-7 h-7 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                ></path>
-              </svg>
-            </div>
-            <h2 class="text-3xl font-bold text-slate-800">
-              Resumen Profesional
-            </h2>
-          </div>
-          <p class="text-slate-700 leading-relaxed text-lg">
-            Data Scientist con experiencia en análisis de datos y Machine Learning. Interesado en aplicar la inteligencia artificial en ámbitos como la salud y las finanzas, 
-                contribuyendo al desarrollo de soluciones con impacto real y valor sostenible
-          </p>
-        </section>
-
-        <!-- Experiencia -->
-        <section
-          class="bg-white rounded-2xl shadow-lg p-10 border border-slate-200"
-        >
-          <div class="flex items-center gap-4 mb-10">
-            <div
-              class="w-14 h-14 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center"
-            >
-              <svg
-                class="w-7 h-7 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                ></path>
-              </svg>
-            </div>
-            <h2 class="text-3xl font-bold text-slate-800">
-              Experiencia Profesional
-            </h2>
-          </div>
-
-          <!-- Job 1 -->
-          <div class="mb-10 pb-10 border-b border-slate-200 last:border-0">
-            <div class="flex justify-between items-start mb-6 flex-wrap gap-3">
-              <div>
-                <h3 class="text-2xl font-semibold text-slate-800">
-                  Data Scientist
-                </h3>
-                <p class="text-cyan-600 font-medium text-lg">
-                  Universidad de Vigo
-                </p>
-                <p class="text-slate-500">Vigo, España</p>
-              </div>
-              <span
-                class="bg-gradient-to-r from-cyan-100 to-blue-100 text-cyan-700 px-5 py-2.5 rounded-full text-sm font-medium"
-                >Junio 2025 - Presente</span
-              >
-            </div>
-            <ul class="space-y-4 text-slate-700">
-              <li
-                class="text-sm font-semibold text-cyan-600 uppercase tracking-wide"
-              >
-                Sistema de Detección de Hidrocarburos
-              </li>
-              <li class="flex gap-4">
-                <span class="text-cyan-500 mt-1">▪</span>
-                <span
-                  ><strong>Detección de hidrocarburos</strong> mediante sistema
-                  Raspberry Pi + Arduino, analizando diferencias espectrales
-                  con/sin luz y estableciendo intervalos de alerta
-                  automatizados</span
-                >
-              </li>
-              <li class="flex gap-4">
-                <span class="text-cyan-500 mt-1">▪</span>
-                <span
-                  >Implementación de pipeline completo: procesamiento en Python,
-                  almacenamiento en MySQL, API REST con Flask y visualización de
-                  datos en frontend desarrollado con React</span
-                >
-              </li>
-
-              <li
-                class="text-sm font-semibold text-cyan-600 uppercase tracking-wide pt-4"
-              >
-                Detección de Blooms en base a Imágenes Satelitales + Variables
-                ambientales y químicas
-              </li>
-              <li class="flex gap-4">
-                <span class="text-cyan-500 mt-1">▪</span>
-                <span
-                  ><strong>Desarrollo de pipeline completo</strong> para
-                  procesamiento de imágenes satelitales Sentinel-2/3 usando
-                  Python, NetCDF4 y xarray</span
-                >
-              </li>
-              <li class="flex gap-4">
-                <span class="text-cyan-500 mt-1">▪</span>
-                <span
-                  >La metodología usada para determinar el mejor modelo para
-                  detección de blooms fue un composite score con distintos pesos
-                  a las métricas más interesantes (F1-Score, Precision y
-                  Recall), utilizando TimeSeriesSplit para garantizar la
-                  robustez de las métricas</span
-                >
-              </li>
-            </ul>
-          </div>
-
-          <!-- Job 2 -->
-          <div class="mb-10 pb-10 border-b border-slate-200 last:border-0">
-            <div class="flex justify-between items-start mb-6 flex-wrap gap-3">
-              <div>
-                <h3 class="text-2xl font-semibold text-slate-800">
-                  Data Scientist / Coordinador de Proyectos
-                </h3>
-                <p class="text-purple-600 font-medium text-lg">
-                  VIXIA SYSTEM SL
-                </p>
-                <p class="text-slate-500">Vigo, España</p>
-              </div>
-              <span
-                class="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 px-5 py-2.5 rounded-full text-sm font-medium"
-                >Abril 2024 - Junio 2025</span
-              >
-            </div>
-            <ul class="space-y-4 text-slate-700">
-              <li
-                class="text-sm font-semibold text-purple-600 uppercase tracking-wide"
-              >
-                Sistema de Clasificación de Aguas para Piscifactorías
-              </li>
-              <li class="flex gap-4">
-                <span class="text-purple-500 mt-1">▪</span>
-                <span
-                  ><strong>Clasificación de aguas peligrosas</strong> para
-                  piscifactorías mediante análisis en tiempo real de parámetros
-                  críticos (COD, ION, NON, PH, TEMP, TSS, TURB) usando modelos
-                  de machine learning</span
-                >
-              </li>
-              <li class="flex gap-4">
-                <span class="text-purple-500 mt-1">▪</span>
-                <span
-                  >Implementación de
-                  <strong>sistema de alertas por SMS</strong> mediante API de
-                  Vonage para notificaciones inmediatas ante detección de
-                  condiciones de riesgo para la producción acuícola</span
-                >
-              </li>
-
-              <li
-                class="text-sm font-semibold text-purple-600 uppercase tracking-wide pt-4"
-              >
-                Estudio de Evolución de Microalgas con Sistema de Monitorización
-              </li>
-              <li class="flex gap-4">
-                <span class="text-purple-500 mt-1">▪</span>
-                <span
-                  ><strong>Coordinación de proyecto de investigación</strong> de
-                  microalgas desarrollando plataforma con Astro y Flask para
-                  monitorización en tiempo real vía Arduino</span
-                >
-              </li>
-              <li class="flex gap-4">
-                <span class="text-purple-500 mt-1">▪</span>
-                <span
-                  >Análisis de <strong>evolución celular</strong> en función de
-                  pH y temperatura, implementando sistema de leds multicolor
-                  para estimulación y visualización de estados de
-                  crecimiento</span
-                >
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <!-- Educación y Certificaciones -->
-        <div class="grid md:grid-cols-2 gap-8">
-          <!-- Educación -->
+      <!-- Contenedor principal del CV -->
+      <div id="cv-container">
+        <!-- El CV original se mantiene aquí -->
+        <div id="html-cv" class="space-y-8">
+          <!-- Resumen -->
           <section
             class="bg-white rounded-2xl shadow-lg p-10 border border-slate-200"
           >
             <div class="flex items-center gap-4 mb-8">
               <div
-                class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center"
+                class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center"
               >
                 <svg
-                  class="w-6 h-6 text-white"
+                  class="w-7 h-7 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -293,57 +206,294 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                   ></path>
                 </svg>
               </div>
-              <h2 class="text-2xl font-bold text-slate-800">Educación</h2>
+              <h2 class="text-3xl font-bold text-slate-800">
+                Resumen Profesional
+              </h2>
+            </div>
+            <p class="text-slate-700 leading-relaxed text-lg">
+              Data Scientist con experiencia en análisis de datos y Machine Learning. Interesado en aplicar la inteligencia artificial en ámbitos como la salud y las finanzas, 
+              contribuyendo al desarrollo de soluciones con impacto real y valor sostenible
+            </p>
+          </section>
+
+          <!-- Experiencia -->
+          <section
+            class="bg-white rounded-2xl shadow-lg p-10 border border-slate-200"
+          >
+            <div class="flex items-center gap-4 mb-10">
+              <div
+                class="w-14 h-14 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center"
+              >
+                <svg
+                  class="w-7 h-7 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  ></path>
+                </svg>
+              </div>
+              <h2 class="text-3xl font-bold text-slate-800">
+                Experiencia Profesional
+              </h2>
             </div>
 
-            <div class="space-y-8">
-              <div>
-                <div
-                  class="flex justify-between items-start mb-3 flex-wrap gap-2"
-                >
-                  <h3 class="text-lg font-semibold text-slate-800">
-                    Desarrollador de Aplicaciones Multiplataforma
+            <!-- Job 1 -->
+            <div class="mb-10 pb-10 border-b border-slate-200 last:border-0">
+              <div class="flex justify-between items-start mb-6 flex-wrap gap-3">
+                <div>
+                  <h3 class="text-2xl font-semibold text-slate-800">
+                    Data Scientist
                   </h3>
-                  <span class="text-emerald-600 font-medium text-sm">2024</span>
+                  <p class="text-cyan-600 font-medium text-lg">
+                    Universidad de Vigo
+                  </p>
+                  <p class="text-slate-500">Vigo, España</p>
                 </div>
-                <p class="text-emerald-600 font-medium">Colegio Vivas CPR</p>
-                <p class="text-slate-600 text-sm mt-3">
-                  Especialización en desarrollo de aplicaciones multiplataforma
-                  (móvil y web), diseño de interfaces de usuario y buenas
-                  prácticas de desarrollo de software
-                </p>
+                <span
+                  class="bg-gradient-to-r from-cyan-100 to-blue-100 text-cyan-700 px-5 py-2.5 rounded-full text-sm font-medium"
+                  >Junio 2025 - Presente</span
+                >
               </div>
+              <ul class="space-y-4 text-slate-700">
+                <li
+                  class="text-sm font-semibold text-cyan-600 uppercase tracking-wide"
+                >
+                  Sistema de Detección de Hidrocarburos
+                </li>
+                <li class="flex gap-4">
+                  <span class="text-cyan-500 mt-1">▪</span>
+                  <span
+                    ><strong>Detección de hidrocarburos</strong> mediante sistema
+                    Raspberry Pi + Arduino, analizando diferencias espectrales
+                    con/sin luz y estableciendo intervalos de alerta
+                    automatizados</span
+                  >
+                </li>
+                <li class="flex gap-4">
+                  <span class="text-cyan-500 mt-1">▪</span>
+                  <span
+                    >Implementación de pipeline completo: procesamiento en Python,
+                    almacenamiento en MySQL, API REST con Flask y visualización de
+                    datos en frontend desarrollado con React</span
+                  >
+                </li>
 
-              <div>
-                <div
-                  class="flex justify-between items-start mb-3 flex-wrap gap-2"
+                <li
+                  class="text-sm font-semibold text-cyan-600 uppercase tracking-wide pt-4"
                 >
-                  <h3 class="text-lg font-semibold text-slate-800">
-                    Certificado de Inglés B2
+                  Detección de Blooms en base a Imágenes Satelitales + Variables
+                  ambientales y químicas
+                </li>
+                <li class="flex gap-4">
+                  <span class="text-cyan-500 mt-1">▪</span>
+                  <span
+                    ><strong>Desarrollo de pipeline completo</strong> para
+                    procesamiento de imágenes satelitales Sentinel-2/3 usando
+                    Python, NetCDF4 y xarray</span
+                  >
+                </li>
+                <li class="flex gap-4">
+                  <span class="text-cyan-500 mt-1">▪</span>
+                  <span
+                    >La metodología usada para determinar el mejor modelo para
+                    detección de blooms fue un composite score con distintos pesos
+                    a las métricas más interesantes (F1-Score, Precision y
+                    Recall), utilizando TimeSeriesSplit para garantizar la
+                    robustez de las métricas</span
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <!-- Job 2 -->
+            <div class="mb-10 pb-10 border-b border-slate-200 last:border-0">
+              <div class="flex justify-between items-start mb-6 flex-wrap gap-3">
+                <div>
+                  <h3 class="text-2xl font-semibold text-slate-800">
+                    Data Scientist / Coordinador de Proyectos
                   </h3>
-                  <span class="text-emerald-600 font-medium text-sm">2019</span>
+                  <p class="text-purple-600 font-medium text-lg">
+                    VIXIA SYSTEM SL
+                  </p>
+                  <p class="text-slate-500">Vigo, España</p>
                 </div>
-                <p class="text-emerald-600 font-medium">
-                  Trinity College London
-                </p>
+                <span
+                  class="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 px-5 py-2.5 rounded-full text-sm font-medium"
+                  >Abril 2024 - Junio 2025</span
+                >
               </div>
+              <ul class="space-y-4 text-slate-700">
+                <li
+                  class="text-sm font-semibold text-purple-600 uppercase tracking-wide"
+                >
+                  Sistema de Clasificación de Aguas para Piscifactorías
+                </li>
+                <li class="flex gap-4">
+                  <span class="text-purple-500 mt-1">▪</span>
+                  <span
+                    ><strong>Clasificación de aguas peligrosas</strong> para
+                    piscifactorías mediante análisis en tiempo real de parámetros
+                    críticos (COD, ION, NON, PH, TEMP, TSS, TURB) usando modelos
+                    de machine learning</span
+                  >
+                </li>
+                <li class="flex gap-4">
+                  <span class="text-purple-500 mt-1">▪</span>
+                  <span
+                    >Implementación de
+                    <strong>sistema de alertas por SMS</strong> mediante API de
+                    Vonage para notificaciones inmediatas ante detección de
+                    condiciones de riesgo para la producción acuícola</span
+                  >
+                </li>
+
+                <li
+                  class="text-sm font-semibold text-purple-600 uppercase tracking-wide pt-4"
+                >
+                  Estudio de Evolución de Microalgas con Sistema de Monitorización
+                </li>
+                <li class="flex gap-4">
+                  <span class="text-purple-500 mt-1">▪</span>
+                  <span
+                    ><strong>Coordinación de proyecto de investigación</strong> de
+                    microalgas desarrollando plataforma con Astro y Flask para
+                    monitorización en tiempo real vía Arduino</span
+                  >
+                </li>
+                <li class="flex gap-4">
+                  <span class="text-purple-500 mt-1">▪</span>
+                  <span
+                    >Análisis de <strong>evolución celular</strong> en función de
+                    pH y temperatura, implementando sistema de leds multicolor
+                    para estimulación y visualización de estados de
+                    crecimiento</span
+                  >
+                </li>
+              </ul>
             </div>
           </section>
 
-          <!-- Certificaciones -->
+          <!-- Educación y Certificaciones -->
+          <div class="grid md:grid-cols-2 gap-8">
+            <!-- Educación -->
+            <section
+              class="bg-white rounded-2xl shadow-lg p-10 border border-slate-200"
+            >
+              <div class="flex items-center gap-4 mb-8">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    ></path>
+                  </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800">Educación</h2>
+              </div>
+
+              <div class="space-y-8">
+                <div>
+                  <div
+                    class="flex justify-between items-start mb-3 flex-wrap gap-2"
+                  >
+                    <h3 class="text-lg font-semibold text-slate-800">
+                      Desarrollador de Aplicaciones Multiplataforma
+                    </h3>
+                    <span class="text-emerald-600 font-medium text-sm">2024</span>
+                  </div>
+                  <p class="text-emerald-600 font-medium">Colegio Vivas CPR</p>
+                  <p class="text-slate-600 text-sm mt-3">
+                    Especialización en desarrollo de aplicaciones multiplataforma
+                    (móvil y web), diseño de interfaces de usuario y buenas
+                    prácticas de desarrollo de software
+                  </p>
+                </div>
+
+                <div>
+                  <div
+                    class="flex justify-between items-start mb-3 flex-wrap gap-2"
+                  >
+                    <h3 class="text-lg font-semibold text-slate-800">
+                      Certificado de Inglés B2
+                    </h3>
+                    <span class="text-emerald-600 font-medium text-sm">2019</span>
+                  </div>
+                  <p class="text-emerald-600 font-medium">
+                    Trinity College London
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Certificaciones -->
+            <section
+              class="bg-white rounded-2xl shadow-lg p-10 border border-slate-200"
+            >
+              <div class="flex items-center gap-4 mb-8">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                    ></path>
+                  </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800">Certificaciones</h2>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold text-slate-800 mb-3">
+                  Python para Data Science
+                </h3>
+                <p class="text-amber-600 font-medium mb-3">OpenWebinars • 2024</p>
+                <p class="text-slate-600 text-sm">
+                  Certificado que acredita la finalización de un curso de 30 horas
+                  en Python para Data Science, adquiriendo habilidades prácticas
+                  en manipulación de datos, análisis, visualización y trabajo con
+                  librerías como NumPy y Pandas.
+                </p>
+              </div>
+            </section>
+          </div>
+
+          <!-- Habilidades -->
           <section
             class="bg-white rounded-2xl shadow-lg p-10 border border-slate-200"
           >
             <div class="flex items-center gap-4 mb-8">
               <div
-                class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center"
+                class="w-14 h-14 bg-gradient-to-br from-rose-400 to-red-500 rounded-xl flex items-center justify-center"
               >
                 <svg
-                  class="w-6 h-6 text-white"
+                  class="w-7 h-7 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -352,97 +502,61 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
                   ></path>
                 </svg>
               </div>
-              <h2 class="text-2xl font-bold text-slate-800">Certificaciones</h2>
+              <h2 class="text-3xl font-bold text-slate-800">
+                Habilidades Técnicas
+              </h2>
             </div>
-
-            <div>
-              <h3 class="text-lg font-semibold text-slate-800 mb-3">
-                Python para Data Science
-              </h3>
-              <p class="text-amber-600 font-medium mb-3">OpenWebinars • 2024</p>
-              <p class="text-slate-600 text-sm">
-                Certificado que acredita la finalización de un curso de 30 horas
-                en Python para Data Science, adquiriendo habilidades prácticas
-                en manipulación de datos, análisis, visualización y trabajo con
-                librerías como NumPy y Pandas.
-              </p>
+            <div class="flex flex-wrap gap-4">
+              <span
+                class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
+                >Python</span
+              >
+              <span
+                class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
+                >JupyterLab</span
+              >
+              <span
+                class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
+                >scikit-learn</span
+              >
+              <span
+                class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
+                >Matplotlib</span
+              >
+              <span
+                class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
+                >NumPy & Pandas</span
+              >
+              <span
+                class="bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
+                >Machine Learning</span
+              >
+              <span
+                class="bg-gradient-to-r from-violet-500 to-purple-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
+                >SQL / MySQL</span
+              >
+              <span
+                class="bg-gradient-to-r from-slate-600 to-slate-700 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
+                >Flask</span
+              >
+              <span
+                class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
+                >TypeScript</span
+              >
+              <span
+                class="bg-gradient-to-r from-red-600 to-pink-600 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
+                >Raspberry Pi</span
+              >
             </div>
           </section>
         </div>
-
-        <!-- Habilidades -->
-        <section
-          class="bg-white rounded-2xl shadow-lg p-10 border border-slate-200"
-        >
-          <div class="flex items-center gap-4 mb-8">
-            <div
-              class="w-14 h-14 bg-gradient-to-br from-rose-400 to-red-500 rounded-xl flex items-center justify-center"
-            >
-              <svg
-                class="w-7 h-7 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                ></path>
-              </svg>
-            </div>
-            <h2 class="text-3xl font-bold text-slate-800">
-              Habilidades Técnicas
-            </h2>
-          </div>
-          <div class="flex flex-wrap gap-4">
-            <span
-              class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
-              >Python</span
-            >
-            <span
-              class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
-              >JupyterLab</span
-            >
-            <span
-              class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
-              >scikit-learn</span
-            >
-            <span
-              class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
-              >Matplotlib</span
-            >
-            <span
-              class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
-              >NumPy & Pandas</span
-            >
-            <span
-              class="bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
-              >Machine Learning</span
-            >
-            <span
-              class="bg-gradient-to-r from-violet-500 to-purple-500 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
-              >SQL / MySQL</span
-            >
-            <span
-              class="bg-gradient-to-r from-slate-600 to-slate-700 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
-              >Flask</span
-            >
-            <span
-              class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
-              >TypeScript</span
-            >
-            <span
-              class="bg-gradient-to-r from-red-600 to-pink-600 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition"
-              >Raspberry Pi</span
-            >
-          </div>
-        </section>
+        
+        <!-- Los formatos de programación se insertarán aquí dinámicamente -->
+        <div id="code-cv" class="hidden"></div>
       </div>
 
       <!-- Footer -->
@@ -450,7 +564,668 @@
         <p class="text-sm">
           © 2025 Guillermo Bastos Ribas - Todos los derechos reservados
         </p>
+        <p class="text-xs mt-2 text-slate-500">🎯 CV disponible en múltiples formatos de programación</p>
       </footer>
     </div>
+
+    <script>
+      // Datos del CV en diferentes formatos
+      const cvData = {
+        // JSON
+        json: `{
+  "cv": {
+    "informacion_personal": {
+      "nombre": "Guillermo Bastos Ribas",
+      "titulo": "Data Scientist & Desarrollador Full Stack",
+      "contacto": {
+        "email": "bastosribasguillermo@gmail.com",
+        "linkedin": "linkedin.com/in/guillermo-bastos-4aba6b156"
+      }
+    },
+    "resumen": "Data Scientist con experiencia en análisis de datos y Machine Learning. \n\t\tInteresado en aplicar la inteligencia artificial en ámbitos como la salud y las finanzas, \n\t\tcontribuyendo al desarrollo de soluciones con impacto real y valor sostenible",
+    "experiencia": [
+      {
+        "puesto": "Data Scientist",
+        "empresa": "Universidad de Vigo",
+        "ubicacion": "Vigo, España",
+        "fecha": "Junio 2025 - Presente",
+        "proyectos": [
+          {
+            "nombre": "Sistema de Detección de Hidrocarburos",
+            "descripcion": "Detección de hidrocarburos mediante sistema Raspberry Pi + Arduino,\n\t\t\t\tanalizando diferencias espectrales con/sin luz y estableciendo intervalos de alerta automatizados",
+            "tecnologias": ["Python", "MySQL", "Flask", "React", "Raspberry Pi", "Arduino"]
+          },
+          {
+            "nombre": "Detección de Blooms en base a Imágenes Satelitales",
+            "descripcion": "Desarrollo de pipeline completo para procesamiento de imágenes satelitales Sentinel-2/3\n\t\t\t\tusando Python, NetCDF4 y xarray",
+            "metodologia": "Composite score con pesos en F1-Score, Precision y Recall utilizando TimeSeriesSplit"
+          }
+        ]
+      },
+      {
+        "puesto": "Data Scientist / Coordinador de Proyectos",
+        "empresa": "VIXIA SYSTEM SL",
+        "ubicacion": "Vigo, España",
+        "fecha": "Abril 2024 - Junio 2025",
+        "proyectos": [
+          {
+            "nombre": "Sistema de Clasificación de Aguas para Piscifactorías",
+            "descripcion": "Clasificación de aguas peligrosas para piscifactorías mediante análisis en tiempo real\n\t\t\t\tde parámetros críticos usando modelos de machine learning",
+            "caracteristicas": ["Sistema de alertas por SMS mediante API de Vonage", 
+                "Monitoreo de COD, ION, NON, PH, TEMP, TSS, TURB"]
+          },
+          {
+            "nombre": "Estudio de Evolución de Microalgas con Sistema de Monitorización",
+            "descripcion": "Coordinación de proyecto de investigación de microalgas desarrollando plataforma\n\t\t\t\tcon Astro y Flask para monitorización en tiempo real vía Arduino",
+            "analisis": "Evolución celular en función de pH y temperatura con sistema de leds multicolor\n\t\t\t\tpara estimulación"
+          }
+        ]
+      }
+    ],
+    "educacion": [
+      {
+        "titulo": "Desarrollador de Aplicaciones Multiplataforma",
+        "institucion": "Colegio Vivas CPR",
+        "año": 2024,
+        "descripcion": "Especialización en desarrollo de aplicaciones multiplataforma (móvil y web),
+            diseño de interfaces de usuario y buenas prácticas de desarrollo de software"
+      },
+      {
+        "titulo": "Certificado de Inglés B2",
+        "institucion": "Trinity College London",
+        "año": 2019
+      }
+    ],
+    "certificaciones": [
+      {
+        "nombre": "Python para Data Science",
+        "institucion": "OpenWebinars",
+        "año": 2024,
+        "descripcion": "Certificado que acredita la finalización de un curso de 30 horas en Python para Data Science,
+            adquiriendo habilidades prácticas en manipulación de datos, análisis, visualización
+            y trabajo con librerías como NumPy y Pandas"
+      }
+    ],
+    "habilidades": [
+      "Python", "JupyterLab", "scikit-learn", "Matplotlib", 
+      "NumPy & Pandas", "Machine Learning", "SQL / MySQL", 
+      "Flask", "TypeScript", "Raspberry Pi"
+    ],
+    "meta": {
+      "version": "1.0.0",
+      "formato": "JSON",
+      "generado": "${new Date().toISOString().split('T')[0]}",
+      "nota": "¡Mi CV también se puede parsear como objeto JavaScript!"
+    }
+  }
+}`,
+
+        // YAML
+        yaml: `# CV de Guillermo Bastos Ribas
+# Formato: YAML
+# Versión: 1.0.0
+
+informacion_personal:
+  nombre: "Guillermo Bastos Ribas"
+  titulo: "Data Scientist & Desarrollador Full Stack"
+  contacto:
+    email: "bastosribasguillermo@gmail.com"
+    linkedin: "linkedin.com/in/guillermo-bastos-4aba6b156"
+
+resumen: >
+  Data Scientist con experiencia en análisis de datos y Machine Learning.
+  Interesado en aplicar la inteligencia artificial en ámbitos como la salud
+  y las finanzas, contribuyendo al desarrollo de soluciones con impacto
+  real y valor sostenible.
+
+experiencia:
+  - puesto: "Data Scientist"
+    empresa: "Universidad de Vigo"
+    ubicacion: "Vigo, España"
+    fecha: "Junio 2025 - Presente"
+    proyectos:
+      - nombre: "Sistema de Detección de Hidrocarburos"
+        descripcion: "Detección de hidrocarburos mediante sistema Raspberry Pi + Arduino"
+        tecnologias:
+          - "Python"
+          - "MySQL"
+          - "Flask"
+          - "React"
+          - "Raspberry Pi"
+          - "Arduino"
+        caracteristicas:
+          - "Análisis de diferencias espectrales con/sin luz"
+          - "Intervalos de alerta automatizados"
+          - "Pipeline completo: procesamiento → almacenamiento → API → frontend"
+
+      - nombre: "Detección de Blooms en base a Imágenes Satelitales"
+        descripcion: "Procesamiento de imágenes satelitales Sentinel-2/3"
+        herramientas:
+          - "Python"
+          - "NetCDF4"
+          - "xarray"
+        metodologia: >
+          Composite score con distintos pesos a F1-Score, Precision y Recall,
+          utilizando TimeSeriesSplit para garantizar robustez de métricas.
+
+  - puesto: "Data Scientist / Coordinador de Proyectos"
+    empresa: "VIXIA SYSTEM SL"
+    ubicacion: "Vigo, España"
+    fecha: "Abril 2024 - Junio 2025"
+    proyectos:
+      - nombre: "Sistema de Clasificación de Aguas para Piscifactorías"
+        descripcion: "Clasificación de aguas peligrosas mediante ML en tiempo real"
+        parametros_monitoreados:
+          - "COD"
+          - "ION"
+          - "NON"
+          - "PH"
+          - "TEMP"
+          - "TSS"
+          - "TURB"
+        sistema_alertas: "SMS mediante API de Vonage"
+        
+      - nombre: "Estudio de Evolución de Microalgas"
+        descripcion: "Monitorización en tiempo real vía Arduino"
+        stack_tecnologico:
+          - "Astro"
+          - "Flask"
+          - "Arduino"
+        analisis: "Evolución celular en función de pH y temperatura"
+        visualizacion: "Sistema de leds multicolor para estados de crecimiento"
+
+educacion:
+  - titulo: "Desarrollador de Aplicaciones Multiplataforma"
+    institucion: "Colegio Vivas CPR"
+    año: 2024
+    descripcion: >
+      Especialización en desarrollo de aplicaciones multiplataforma
+      (móvil y web), diseño de interfaces de usuario y buenas
+      prácticas de desarrollo de software.
+
+  - titulo: "Certificado de Inglés B2"
+    institucion: "Trinity College London"
+    año: 2019
+
+certificaciones:
+  - nombre: "Python para Data Science"
+    institucion: "OpenWebinars"
+    año: 2024
+    horas: 30
+    descripcion: >
+      Habilidades prácticas en manipulación de datos, análisis,
+      visualización y trabajo con librerías como NumPy y Pandas.
+
+habilidades_tecnicas:
+  - "Python"
+  - "JupyterLab"
+  - "scikit-learn"
+  - "Matplotlib"
+  - "NumPy & Pandas"
+  - "Machine Learning"
+  - "SQL / MySQL"
+  - "Flask"
+  - "TypeScript"
+  - "Raspberry Pi"
+
+# Nota: ¡YAML es perfecto para configuraciones y datos estructurados!
+# Así que mi CV ahora es también un archivo de configuración legible.`,
+
+        // Python
+        python: `"""
+CV de Guillermo Bastos Ribas
+Formato: Python Dict
+Versión: 1.0.0
+"""
+
+class CurriculumVitae:
+    """Clase que representa mi CV en formato Python"""
+    
+    def __init__(self):
+        self.datos = {
+            'informacion_personal': {
+                'nombre': 'Guillermo Bastos Ribas',
+                'titulo': 'Data Scientist & Desarrollador Full Stack',
+                'contacto': {
+                    'email': 'bastosribasguillermo@gmail.com',
+                    'linkedin': 'linkedin.com/in/guillermo-bastos-4aba6b156'
+                }
+            },
+            
+            'resumen': (
+                "Data Scientist con experiencia en análisis de datos y Machine Learning. "
+                "Interesado en aplicar la inteligencia artificial en ámbitos como la salud "
+                "y las finanzas, contribuyendo al desarrollo de soluciones con impacto "
+                "real y valor sostenible."
+            ),
+            
+            'experiencia': [
+                {
+                    'puesto': 'Data Scientist',
+                    'empresa': 'Universidad de Vigo',
+                    'ubicacion': 'Vigo, España',
+                    'fecha': 'Junio 2025 - Presente',
+                    'proyectos': [
+                        {
+                            'nombre': 'Sistema de Detección de Hidrocarburos',
+                            'descripcion': 'Detección mediante Raspberry Pi + Arduino',
+                            'stack': ['Python', 'MySQL', 'Flask', 'React'],
+                            'hardware': ['Raspberry Pi', 'Arduino'],
+                            'features': [
+                                'Análisis de diferencias espectrales',
+                                'Alertas automatizadas',
+                                'Pipeline completo end-to-end'
+                            ]
+                        },
+                        {
+                            'nombre': 'Detección de Blooms con Imágenes Satelitales',
+                            'descripcion': 'Procesamiento de imágenes Sentinel-2/3',
+                            'librerias': ['NetCDF4', 'xarray', 'scikit-learn'],
+                            'metodologia': (
+                                "Composite score con pesos en F1-Score, Precision y Recall, "
+                                "usando TimeSeriesSplit para validación robusta"
+                            )
+                        }
+                    ]
+                },
+                {
+                    'puesto': 'Data Scientist / Coordinador de Proyectos',
+                    'empresa': 'VIXIA SYSTEM SL',
+                    'ubicacion': 'Vigo, España',
+                    'fecha': 'Abril 2024 - Junio 2025',
+                    'proyectos': [
+                        {
+                            'nombre': 'Clasificación de Aguas para Piscifactorías',
+                            'descripcion': 'Sistema de monitoreo en tiempo real con ML',
+                            'parametros': ['COD', 'ION', 'NON', 'PH', 'TEMP', 'TSS', 'TURB'],
+                            'alertas': 'SMS mediante API de Vonage',
+                            'objetivo': 'Prevención de riesgos en producción acuícola'
+                        },
+                        {
+                            'nombre': 'Estudio de Evolución de Microalgas',
+                            'descripcion': 'Plataforma de monitorización con Arduino',
+                            'frontend': 'Astro',
+                            'backend': 'Flask',
+                            'hardware': 'Arduino con sensores',
+                            'analisis': 'Relación entre pH/temperatura y crecimiento celular',
+                            'visualizacion': 'Sistema de leds multicolor para estados'
+                        }
+                    ]
+                }
+            ],
+            
+            'educacion': [
+                {
+                    'titulo': 'Desarrollador de Aplicaciones Multiplataforma',
+                    'institucion': 'Colegio Vivas CPR',
+                    'año': 2024,
+                    'descripcion': (
+                        "Especialización en desarrollo multiplataforma (móvil y web), "
+                        "diseño de UI/UX y buenas prácticas de desarrollo"
+                    )
+                },
+                {
+                    'titulo': 'Certificado de Inglés B2',
+                    'institucion': 'Trinity College London',
+                    'año': 2019
+                }
+            ],
+            
+            'certificaciones': [
+                {
+                    'nombre': 'Python para Data Science',
+                    'institucion': 'OpenWebinars',
+                    'año': 2024,
+                    'horas': 30,
+                    'skills_adquiridos': [
+                        'Manipulación de datos con Pandas',
+                        'Análisis estadístico',
+                        'Visualización de datos',
+                        'Trabajo con NumPy'
+                    ]
+                }
+            ],
+            
+            'habilidades': [
+                'Python', 'JupyterLab', 'scikit-learn', 'Matplotlib',
+                'NumPy & Pandas', 'Machine Learning', 'SQL / MySQL',
+                'Flask', 'TypeScript', 'Raspberry Pi'
+            ]
+        }
+    
+    def mostrar_resumen(self):
+        """Método para mostrar un resumen del CV"""
+        print(f"Nombre: {self.datos['informacion_personal']['nombre']}")
+        print(f"Título: {self.datos['informacion_personal']['titulo']}")
+        print(f"Experiencia: {len(self.datos['experiencia'])} posiciones")
+        print(f"Habilidades: {len(self.datos['habilidades'])} habilidades técnicas")
+        print(f"Educación: {len(self.datos['educacion'])} certificaciones")
+        
+    def buscar_habilidad(self, habilidad):
+        """Busca si tengo una habilidad específica"""
+        return habilidad in self.datos['habilidades']
+    
+    def obtener_experiencia_total(self):
+        """Calcula experiencia total (simplificado)"""
+        # En una versión real, aquí se calcularían las fechas
+        return "Más de 2 años de experiencia en Data Science"
+
+# Instancia de mi CV
+mi_cv = CurriculumVitae()
+
+# Ejemplo de uso:
+# print(mi_cv.datos['informacion_personal']['nombre'])
+# mi_cv.mostrar_resumen()
+# print(f"¿Sé Python? {mi_cv.buscar_habilidad('Python')}")
+
+print("¡Mi CV ahora es código Python ejecutable!")
+print("Puedes copiar este código y ejecutarlo en tu entorno Python.")`,
+
+        // TypeScript
+        typescript: `// CV de Guillermo Bastos Ribas
+// Formato: TypeScript Interface
+// Versión: 1.0.0
+
+interface Contacto {
+    email: string;
+    linkedin: string;
+}
+
+interface Proyecto {
+    nombre: string;
+    descripcion: string;
+    tecnologias?: string[];
+    caracteristicas?: string[];
+}
+
+interface ExperienciaLaboral {
+    puesto: string;
+    empresa: string;
+    ubicacion: string;
+    fecha: string;
+    proyectos: Proyecto[];
+}
+
+interface Educacion {
+    titulo: string;
+    institucion: string;
+    año: number;
+    descripcion?: string;
+}
+
+interface Certificacion {
+    nombre: string;
+    institucion: string;
+    año: number;
+    descripcion: string;
+}
+
+// Interfaz principal del CV
+interface CurriculumVitae {
+    informacionPersonal: {
+        nombre: string;
+        titulo: string;
+        contacto: Contacto;
+    };
+    
+    resumen: string;
+    
+    experiencia: ExperienciaLaboral[];
+    
+    educacion: Educacion[];
+    
+    certificaciones: Certificacion[];
+    
+    habilidades: string[];
+    
+    metadata: {
+        version: string;
+        ultimaActualizacion: string;
+        formato: string;
+    };
+}
+
+// Implementación con mis datos
+const miCV: CurriculumVitae = {
+    informacionPersonal: {
+        nombre: "Guillermo Bastos Ribas",
+        titulo: "Data Scientist & Desarrollador Full Stack",
+        contacto: {
+            email: "bastosribasguillermo@gmail.com",
+            linkedin: "linkedin.com/in/guillermo-bastos-4aba6b156"
+        }
+    },
+    
+    resumen: "Data Scientist con experiencia en análisis de datos y Machine Learning. 
+    Interesado en aplicar la inteligencia artificial en ámbitos como la salud y las finanzas, 
+    contribuyendo al desarrollo de soluciones con impacto real y valor sostenible.",
+    
+    experiencia: [
+        {
+            puesto: "Data Scientist",
+            empresa: "Universidad de Vigo",
+            ubicacion: "Vigo, España",
+            fecha: "Junio 2025 - Presente",
+            proyectos: [
+                {
+                    nombre: "Sistema de Detección de Hidrocarburos",
+                    descripcion: "Detección de hidrocarburos mediante sistema Raspberry Pi + Arduino, 
+                        analizando diferencias espectrales con/sin luz",
+                    tecnologias: ["Python", "MySQL", "Flask", "React"],
+                    caracteristicas: [
+                        "Análisis espectral en tiempo real",
+                        "Sistema de alertas automatizado",
+                        "Pipeline completo end-to-end"
+                    ]
+                },
+                {
+                    nombre: "Detección de Blooms con Imágenes Satelitales",
+                    descripcion: "Procesamiento de imágenes satelitales Sentinel-2/3 para detección de blooms de algas",
+                    tecnologias: ["Python", "NetCDF4", "xarray", "scikit-learn"],
+                    caracteristicas: [
+                        "Composite score con pesos en métricas clave",
+                        "Validación con TimeSeriesSplit",
+                        "Análisis de variables ambientales y químicas"
+                    ]
+                }
+            ]
+        },
+        {
+            puesto: "Data Scientist / Coordinador de Proyectos",
+            empresa: "VIXIA SYSTEM SL",
+            ubicacion: "Vigo, España",
+            fecha: "Abril 2024 - Junio 2025",
+            proyectos: [
+                {
+                    nombre: "Sistema de Clasificación de Aguas para Piscifactorías",
+                    descripcion: "Clasificación de aguas peligrosas mediante análisis en tiempo real 
+                        con machine learning",
+                    tecnologias: ["Python", "scikit-learn", "API REST"],
+                    caracteristicas: [
+                        "Monitoreo de 7 parámetros críticos",
+                        "Sistema de alertas por SMS con Vonage API",
+                        "Prevención de riesgos en acuicultura"
+                    ]
+                },
+                {
+                    nombre: "Estudio de Evolución de Microalgas",
+                    descripcion: "Plataforma de monitorización en tiempo real para estudio de microalgas",
+                    tecnologias: ["Astro", "Flask", "Arduino", "TypeScript"],
+                    caracteristicas: [
+                        "Coordinación de proyecto de investigación",
+                        "Análisis de evolución celular vs pH/temperatura",
+                        "Sistema de visualización con leds multicolor"
+                    ]
+                }
+            ]
+        }
+    ],
+    
+    educacion: [
+        {
+            titulo: "Desarrollador de Aplicaciones Multiplataforma",
+            institucion: "Colegio Vivas CPR",
+            año: 2024,
+            descripcion: "Especialización en desarrollo de aplicaciones multiplataforma (móvil y web),
+                diseño de interfaces de usuario y buenas prácticas de desarrollo de software"
+        },
+        {
+            titulo: "Certificado de Inglés B2",
+            institucion: "Trinity College London",
+            año: 2019
+        }
+    ],
+    
+    certificaciones: [
+        {
+            nombre: "Python para Data Science",
+            institucion: "OpenWebinars",
+            año: 2024,
+            descripcion: "Certificado de 30 horas en Python para Data Science, con habilidades prácticas
+                en manipulación de datos, análisis, visualización y trabajo con NumPy y Pandas"
+        }
+    ],
+    
+    habilidades: [
+        "Python", "JupyterLab", "scikit-learn", "Matplotlib",
+        "NumPy & Pandas", "Machine Learning", "SQL / MySQL",
+        "Flask", "TypeScript", "Raspberry Pi"
+    ],
+    
+    metadata: {
+        version: "1.0.0",
+        ultimaActualizacion: "${new Date().toISOString().split('T')[0]}",
+        formato: "TypeScript"
+    }
+};
+
+// Funciones de utilidad
+function mostrarCV(cv: CurriculumVitae): void {
+    console.log(\`=== \${cv.informacionPersonal.nombre} ===\`);
+    console.log(\`\${cv.informacionPersonal.titulo}\`);
+    console.log(\`Contacto: \${cv.informacionPersonal.contacto.email}\`);
+    console.log(\`\nResumen: \${cv.resumen}\`);
+    console.log(\`\nExperiencia: \${cv.experiencia.length} posiciones\`);
+    console.log(\`Educación: \${cv.educacion.length} certificaciones\`);
+    console.log(\`Habilidades: \${cv.habilidades.length} skills\`);
+}
+
+function tieneHabilidad(cv: CurriculumVitae, habilidad: string): boolean {
+    return cv.habilidades.includes(habilidad);
+}
+
+// Ejemplo de uso
+// mostrarCV(miCV);
+// console.log(\`¿Sé TypeScript? \${tieneHabilidad(miCV, "TypeScript")}\`);
+// console.log(\`¿Sé React? \${tieneHabilidad(miCV, "React")}\`);
+
+console.log("¡Mi CV ahora está tipado con TypeScript!");
+console.log("Puedes usar estas interfaces en tus proyectos TypeScript.");`
+      };
+
+      // Función para cambiar entre formatos
+      function switchCVFormat(format) {
+        // Actualizar botones activos
+        document.querySelectorAll('.format-btn').forEach(btn => {
+          btn.classList.remove('ring-4', 'ring-white/50', 'ring-offset-2');
+        });
+        event.target.classList.add('ring-4', 'ring-white/50', 'ring-offset-2');
+        
+        const cvContainer = document.getElementById('cv-container');
+        const htmlCV = document.getElementById('html-cv');
+        const codeCV = document.getElementById('code-cv');
+        
+        if (format === 'html') {
+          htmlCV.classList.remove('hidden');
+          codeCV.classList.add('hidden');
+          codeCV.innerHTML = '';
+          return;
+        }
+        
+        // Mostrar versión en código
+        htmlCV.classList.add('hidden');
+        codeCV.classList.remove('hidden');
+        
+        // Crear contenedor de código
+        let languageClass = '';
+        switch(format) {
+          case 'python': languageClass = 'language-python'; break;
+          case 'typescript': languageClass = 'language-typescript'; break;
+          case 'json': languageClass = 'language-json'; break;
+          case 'yaml': languageClass = 'language-yaml'; break;
+        }
+        
+        codeCV.innerHTML = `
+          <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl overflow-hidden mb-8">
+            <div class="flex items-center justify-between px-6 py-4 bg-slate-900/80 border-b border-slate-700">
+              <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+                <span class="text-slate-300 font-mono text-sm">cv_guillermo.${format}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-400 px-3 py-1 bg-slate-800 rounded-full">${format.toUpperCase()}</span>
+                <button onclick="copyCode('${format}')" class="text-slate-400 hover:text-white transition px-3 py-1 rounded-lg hover:bg-slate-700 text-sm">
+                  📋 Copiar
+                </button>
+              </div>
+            </div>
+            <div class="p-6 overflow-x-auto">
+              <pre><code class="${languageClass}">${cvData[format]}</code></pre>
+            </div>
+          </div>
+          
+          <div class="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-200 rounded-2xl p-8 mb-8">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-slate-800">✨ ¡CV en ${format.toUpperCase()}!</h3>
+                <p class="text-slate-600">Este es mi CV representado en formato ${format === 'python' ? 'Python (diccionario y clase)' : format === 'typescript' ? 'TypeScript (interfaces y tipos)' : format.toUpperCase()}</p>
+              </div>
+            </div>
+            <p class="text-slate-700">
+              ${format === 'json' ? '¡Puedes copiar este JSON y parsearlo directamente en JavaScript!' : 
+                format === 'yaml' ? '¡Perfecto para configuraciones! YAML es legible y fácil de mantener.' :
+                format === 'python' ? '¡Este código Python es ejecutable! Puedes copiarlo y probarlo en tu entorno.' :
+                '¡Tipado estático con TypeScript! Estas interfaces se pueden usar en proyectos reales.'}
+            </p>
+          </div>
+        `;
+        
+        // Resaltar sintaxis
+        hljs.highlightAll();
+      }
+
+      // Función para copiar código al portapapeles
+      function copyCode(format) {
+        navigator.clipboard.writeText(cvData[format])
+          .then(() => {
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '✅ Copiado!';
+            btn.classList.add('bg-green-500/20', 'text-green-300');
+            setTimeout(() => {
+              btn.textContent = originalText;
+              btn.classList.remove('bg-green-500/20', 'text-green-300');
+            }, 2000);
+          })
+          .catch(err => {
+            console.error('Error al copiar: ', err);
+          });
+      }
+
+      // Inicializar con el formato HTML por defecto
+      document.addEventListener('DOMContentLoaded', () => {
+        // Marcar el botón HTML como activo inicialmente
+        document.querySelectorAll('.format-btn')[0].classList.add('ring-4', 'ring-white/50', 'ring-offset-2');
+      });
+    </script>
   </body>
 </html>
