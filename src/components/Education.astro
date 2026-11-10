@@ -1,0 +1,11 @@
+---
+import { profile } from '../data/profile';
+import Icon from './Icon.astro';
+---
+<section class="section container education-section" id="formacion" aria-labelledby="education-title">
+  <div class="section-heading" data-reveal><div><p class="eyebrow"><span class="section-index">04 /</span> FORMACIÓN CONTINUA</p><h2 id="education-title">Una base sólida. Siempre aprendiendo.</h2></div></div>
+  <div class="education-grid">
+    <div data-reveal><h3 class="column-heading">Educación <span>02</span></h3>{profile.education.map(item => <article class="education-item"><div><p class="mono">{item.period}</p><h4>{item.title}</h4><p class="institution">{item.institution}</p><p class="education-detail">{item.detail}</p></div><Icon name="diagonal" size={18}/></article>)}</div>
+    <div data-reveal><h3 class="column-heading">Certificaciones <span>03</span></h3>{profile.certifications.map(item => <article class="certification-item"><span class="certification-icon"><Icon name="check" size={18}/></span><div><h4>{item.title}</h4><p class="institution">{item.institution} <span>· {item.date}</span></p>{item.detail && <p class="education-detail">{item.detail}</p>}</div></article>)}</div>
+  </div>
+</section>

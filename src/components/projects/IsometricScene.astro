@@ -1,0 +1,139 @@
+---
+import type { CaseStudy } from '../../data/caseStudies';
+import { line, points, project } from '../../lib/isometric';
+import IsoPrism from './IsoPrism.astro';
+import IsoTank from './IsoTank.astro';
+import '../../styles/isometric.css';
+
+interface Props { study: CaseStudy; compact?: boolean; }
+const { study, compact = false } = Astro.props;
+const slug = study.slug;
+const layerNames = ['Sistema completo', 'Entrada', 'Procesamiento', 'Salida'];
+const layerValues = ['all', 'input', 'process', 'output'];
+const guides = Array.from({ length: 13 }, (_, i) => i * 30);
+---
+<figure class:list={['iso-figure', { 'iso-preview': compact }]}>
+  <div class="iso-figure-heading"><span><span class="status-dot"></span> ATLAS DEL SISTEMA</span><span>ISO / {String(['hidropronos', 'raceway-rust-valvulas', 'raceway-rust-sensores', 'capitalink', 'vixiaweb'].indexOf(slug) + 1).padStart(2, '0')}</span></div>
+  <div class="iso-render" data-tilt>
+    <svg viewBox={compact ? '110 40 710 450' : '0 0 900 560'} role="img" aria-labelledby={`iso-title-${slug} iso-desc-${slug}`} class="iso-svg">
+      <title id={`iso-title-${slug}`}>{study.sceneTitle}</title>
+      <desc id={`iso-desc-${slug}`}>{study.sceneDescription}</desc>
+      <defs>
+        <radialGradient id={`atmosphere-${slug}`}><stop stop-color={study.accent} stop-opacity=".1"/><stop offset="1" stop-color={study.accent} stop-opacity="0"/></radialGradient>
+      </defs>
+      <ellipse cx="450" cy="300" rx="400" ry="245" fill={`url(#atmosphere-${slug})`} />
+      <g class="iso-ground-grid">{guides.map(value => <><path d={line([[-50, value, -30], [410, value, -30]])}/><path d={line([[value, -50, -30], [value, 340, -30]])}/></>)}</g>
+      <g class="iso-platform">
+        <IsoPrism x={-15} y={-15} z={-20} w={390} d={315} h={17} />
+        <polygon points={points([[0, 0, -2], [360, 0, -2], [360, 280, -2], [0, 280, -2]])} fill="none" stroke={study.accent} stroke-opacity=".17" />
+      </g>
+
+      {slug === 'hidropronos' && <>
+        <g class="iso-connections"><path d={line([[70, 40, 0], [70, 105, 0], [245, 105, 0]])}/><path d={line([[160, 55, 0], [160, 135, 0], [245, 135, 0]])}/><path d={line([[85, 185, 0], [245, 185, 0], [245, 135, 0]])}/><path d={line([[245, 135, 0], [305, 135, 0], [305, 235, 0]])}/></g>
+        <g data-iso-layer="input">
+          <IsoPrism x={32} y={7} w={77} d={67} h={8} tone="glass" />
+          <IsoTank x={70} y={40} r={26} h={30} label="BEC" />
+          <IsoPrism x={118} y={17} w={85} d={77} h={8} tone="glass" />
+          <IsoTank x={160} y={55} r={31} h={44} label="CAE" />
+          <IsoPrism x={35} y={140} w={100} d={90} h={8} tone="glass" />
+          <IsoTank x={85} y={185} r={37} h={37} label="FOR" />
+        </g>
+        <g data-iso-layer="process">
+          <IsoPrism x={205} y={90} w={85} d={78} h={76} label="MODELOS / LORO" tone="accent" />
+          {[0, 1, 2].map(i => <path d={line([[214, 170, 17 + i * 16], [280, 170, 17 + i * 16]])} class="iso-panel-line"/>)}
+          {[[220, 105], [270, 105], [245, 145]].map(([x, y]) => <circle cx={project(x, y, 78)[0]} cy={project(x, y, 78)[1]} r="4" fill={study.accent}/>)}
+          <path d={line([[220, 105, 78], [270, 105, 78], [245, 145, 78], [220, 105, 78]])} class="iso-fine-line"/>
+        </g>
+        <g data-iso-layer="output">
+          {[0, 1, 2].map(i => <IsoPrism x={272} y={205} z={i * 23} w={68} d={52} h={9} tone={i === 2 ? 'accent' : 'glass'} label={i === 2 ? 'VIGILANCIA' : undefined} labelDx={-60}/>)}
+          <path d={line([[284, 218, 60], [292, 226, 60], [326, 208, 60]])} stroke={study.accent} stroke-width="3" fill="none"/>
+        </g>
+      </>}
+
+      {slug === 'raceway-rust-valvulas' && <>
+        <g class="iso-connections iso-pipes"><path d={line([[80, 170, 12], [160, 170, 12], [160, 130, 12], [220, 130, 12]])}/><path d={line([[220, 130, 12], [305, 130, 12], [305, 235, 12], [270, 235, 12]])}/><path d={line([[220, 130, 12], [220, 55, 12], [100, 55, 12]])}/></g>
+        <g data-iso-layer="output">
+          <IsoPrism x={15} y={15} w={260} d={58} h={27} label="CANAL RACEWAY" labelDy={-40} labelDx={25} />
+          <IsoPrism x={25} y={24} z={27} w={240} d={40} h={2} tone="water" />
+          {[0, 1, 2].map(i => <path d={line([[45, 33 + i * 10, 30], [240, 33 + i * 10, 30]])} class="iso-water-line"/>)}
+          <IsoTank x={80} y={170} r={36} h={62} label="DEPÓSITO RW" />
+          <IsoTank x={220} y={130} r={33} h={83} label="DECANTADOR" />
+          <IsoTank x={270} y={235} r={29} h={42} label="COSECHA" />
+        </g>
+        <g data-iso-layer="process">
+          <IsoPrism x={300} y={30} w={42} d={45} h={75} label="ADAM" tone="accent" />
+          {[0, 1, 2].map(i => <path d={line([[305, 77, 22 + i * 15], [337, 77, 22 + i * 15]])} class="iso-panel-line"/>)}
+          {[[130, 170], [185, 130], [270, 130], [305, 180], [220, 83], [270, 235]].map(([x, y]) => <polygon points={points([[x - 7, y, 15], [x, y - 7, 15], [x + 7, y, 15], [x, y + 7, 15]])} class="iso-valve"/>)}
+        </g>
+        <g data-iso-layer="input">
+          {[[80, 150, 17], [80, 150, 39], [80, 150, 62], [220, 110, 18], [220, 110, 76], [270, 218, 43]].map(([x, y, z], i) => <g><circle cx={project(x, y, z)[0]} cy={project(x, y, z)[1]} r="4" fill={study.accent}/><text x={project(x, y, z)[0] - 13} y={project(x, y, z)[1] + 3} class="iso-pin-label" text-anchor="end">D{i}</text></g>)}
+        </g>
+      </>}
+
+      {slug === 'raceway-rust-sensores' && <>
+        <g class="iso-connections"><path d={line([[70, 55, 0], [70, 100, 0], [265, 100, 0], [265, 170, 0]])}/><path d={line([[180, 55, 0], [180, 100, 0]])}/><path d={line([[290, 55, 0], [290, 100, 0]])}/><path d={line([[265, 170, 0], [320, 170, 0], [320, 240, 0]])}/></g>
+        <g data-iso-layer="input">
+          {[['MULTI', 45], ['HACH', 155], ['TRILUX', 265]].map(([label, position]) => <g><IsoPrism x={Number(position)} y={28} w={50} d={52} h={45} label={String(label)} tone="glass"/><path d={line([[Number(position) + 25, 80, 15], [Number(position) + 25, 115, 15], [Number(position) + 25, 115, 0]])} class="iso-fine-line"/></g>)}
+          <IsoTank x={105} y={210} r={41} h={48} label="MUESTRA" />
+          {[0, 1, 2].map(i => <path d={line([[80 + i * 18, 185, 80], [80 + i * 18, 185, 25]])} stroke={study.accent} stroke-width="4"/>)}
+        </g>
+        <g data-iso-layer="process">
+          <IsoPrism x={220} y={140} w={88} d={66} h={76} tone="accent" />
+          {[0, 1, 2, 3].map(i => <path d={line([[231, 208, 17 + i * 14], [294, 208, 17 + i * 14]])} class="iso-panel-line"/>)}
+          <IsoPrism x={239} y={157} z={76} w={48} d={31} h={5} tone="glass" label="RUST / GATEWAY" labelDy={-12} />
+        </g>
+        <g data-iso-layer="output">
+          <IsoTank x={325} y={247} r={28} h={65} label="SQLITE / API" />
+          {[0, 1, 2].map(i => <ellipse cx={project(325, 247)[0]} cy={project(325, 247)[1] - 12 - i * 17} rx="34" ry="19" class="iso-db-ring"/>)}
+        </g>
+      </>}
+
+      {slug === 'capitalink' && <>
+        <g class="iso-connections"><path d={line([[65, 60, 0], [205, 60, 0], [205, 135, 0]])}/><path d={line([[70, 235, 0], [205, 235, 0], [205, 135, 0]])}/><path d={line([[205, 135, 0], [320, 135, 0], [320, 255, 0]])}/></g>
+        <g data-iso-layer="input">
+          <IsoPrism x={30} y={25} w={67} d={65} h={85} label="INVERSORES" tone="glass" />
+          <IsoPrism x={28} y={195} w={82} d={65} h={66} label="EMPRESAS" tone="glass" />
+          {[0, 1, 2].map(row => <>{[0, 1, 2].map(col => <path d={line([[40 + col * 17, 91, 20 + row * 21], [49 + col * 17, 91, 20 + row * 21]])} stroke={study.accent} stroke-width="5" opacity=".6"/>)}</>)}
+          {[0, 1].map(row => <path d={line([[39, 262, 22 + row * 21], [96, 262, 22 + row * 21]])} class="iso-panel-line"/>)}
+        </g>
+        <g data-iso-layer="process">
+          <IsoPrism x={155} y={95} w={105} d={85} h={48} tone="accent" />
+          <IsoPrism x={168} y={108} z={48} w={79} d={60} h={8} tone="glass" label="CAPITALINK / API" labelDy={-12} />
+          <path d={line([[185, 143, 58], [202, 151, 58], [230, 122, 58]])} stroke={study.accent} stroke-width="3" fill="none" />
+        </g>
+        <g data-iso-layer="output">
+          {[0, 49, 99, 249].map((price, i) => <IsoPrism x={293} y={70 + i * 48} w={40} d={28} h={8 + price / 249 * 75} tone={i === 3 ? 'accent' : 'glass'} label={['FREE', 'START', 'PRO', 'ENT'][i]}/>)}
+        </g>
+      </>}
+
+      {slug === 'vixiaweb' && <>
+        <g class="iso-connections"><path d={line([[155, 80, 0], [300, 80, 0], [300, 170, 0]])}/><path d={line([[300, 170, 0], [300, 245, 0], [180, 245, 0]])}/></g>
+        <g data-iso-layer="input">
+          <IsoPrism x={100} y={52} w={105} d={52} h={8} />
+          <IsoPrism x={144} y={55} z={8} w={18} d={20} h={33} />
+          <IsoPrism x={65} y={30} z={35} w={180} d={15} h={135} label="NEXT.JS / INTERFAZ" tone="glass" />
+          <polygon points={points([[74, 46, 48], [236, 46, 48], [236, 46, 155], [74, 46, 155]])} class="iso-screen" />
+          <path d={line([[75, 47, 141], [235, 47, 141]])} class="iso-fine-line"/>
+          {[0, 1, 2].map(i => <polygon points={points([[85 + i * 49, 47, 105], [125 + i * 49, 47, 105], [125 + i * 49, 47, 129], [85 + i * 49, 47, 129]])} fill={study.accent} fill-opacity=".13"/>)}
+          <path d={line([[86, 48, 64], [113, 48, 79], [143, 48, 73], [180, 48, 94], [223, 48, 85]])} stroke={study.accent} stroke-width="2" fill="none" />
+        </g>
+        <g data-iso-layer="process">
+          <IsoPrism x={270} y={140} w={61} d={56} h={84} label="FASTAPI" tone="accent" />
+          {[0, 1, 2, 3].map(i => <path d={line([[278, 198, 18 + i * 17], [323, 198, 18 + i * 17]])} class="iso-panel-line"/>)}
+          {[0, 1, 2].map(i => <IsoPrism x={285} y={25} z={i * 16} w={51} d={47} h={7} label={i === 2 ? 'MÓDULOS' : undefined} tone="glass"/>)}
+        </g>
+        <g data-iso-layer="output">
+          <IsoTank x={185} y={245} r={33} h={62} label="MYSQL / DATOS" />
+          {[0, 1, 2].map(i => <ellipse cx={project(185, 245)[0]} cy={project(185, 245)[1] - 11 - i * 17} rx="40" ry="22" class="iso-db-ring"/>)}
+        </g>
+      </>}
+
+      <g class="iso-axis" transform="translate(765 462)"><path d="M0 0v-34m0 34 28 16M0 0l-28 16"/><text x="-3" y="-43">Z</text><text x="34" y="24">X</text><text x="-40" y="24">Y</text></g>
+    </svg>
+  </div>
+  {!compact && <fieldset class="iso-layer-controls">
+    <legend class="sr-only">Explorar capas de la arquitectura isométrica</legend>
+    {layerValues.map((value, i) => <label><input class="sr-only" type="radio" name={`layer-${slug}`} value={value} checked={i === 0}/><span>{layerNames[i]}</span></label>)}
+  </fieldset>}
+  <figcaption><span>PROYECCIÓN ISOMÉTRICA / ARQUITECTURA CONCEPTUAL</span><span>30° / 30° / Z</span></figcaption>
+</figure>

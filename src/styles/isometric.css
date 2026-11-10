@@ -1,0 +1,22 @@
+/* Shared geometry also used by the large project previews on the home page. */
+.iso-figure { margin: 0; position: relative; min-width: 0; padding: 23px 18px; border: 1px solid #dac5a8; border-radius: 13px; background: #fbf1df; }
+.iso-figure-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; font: 10px var(--font-mono); letter-spacing: .07em; }
+.iso-figure-heading > span:first-child { display: flex; align-items: center; gap: 8px; }
+.iso-render { transform: perspective(1400px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); transition: transform 250ms ease; }
+.iso-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.iso-ground-grid { fill: none; stroke: var(--case-accent, var(--project-accent)); stroke-width: .6; opacity: .1; }
+.iso-face-top, .iso-face-left, .iso-face-right { stroke-width: .9; stroke-linejoin: round; }
+.iso-connections { fill: none; stroke: var(--case-accent, var(--project-accent)); stroke-width: 1.5; stroke-dasharray: 5 5; }
+.iso-pipes { stroke-width: 4; stroke-dasharray: none; }
+.iso-panel-line { fill: none; stroke: var(--case-accent, var(--project-accent)); stroke-width: 3; opacity: .65; }
+.iso-fine-line, .iso-water-line { fill: none; stroke: var(--case-accent, var(--project-accent)); stroke-width: 1; opacity: .7; }
+.iso-object-label { font: 12px var(--font-mono); letter-spacing: .04em; }
+.iso-pin-label { font: 11px var(--font-mono); }
+.iso-db-ring { fill: none; stroke: var(--case-accent, var(--project-accent)); stroke-width: .8; opacity: .6; }
+.iso-axis text { font: 8px var(--font-mono); stroke: none; }
+.iso-figure > figcaption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font: 9px/1.7 var(--font-mono); }
+.iso-preview { --case-accent: var(--project-accent); border: 0; border-radius: 0; }
+.iso-preview .iso-figure-heading { padding-inline: 8px; }
+.iso-preview .iso-render { transform: none; }
+.iso-preview > figcaption { padding-inline: 8px; font-size: 8px; }
+.iso-preview > figcaption span:last-child { display: none; }

@@ -1,0 +1,17 @@
+---
+import Icon from './Icon.astro';
+interface Props { projectPage?: boolean; }
+const { projectPage = false } = Astro.props;
+const home = projectPage ? '/' : '';
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <a href={`${home}#inicio`} class="wordmark" aria-label="gb. Guillermo Bastos, inicio">gb<span>.</span><span class="wordmark-label">GUILLERMO BASTOS</span></a>
+    <nav aria-label="Navegación principal">
+      <a href={`${home}#proyectos`}>Proyectos</a>
+      <a href={projectPage ? '#arquitectura' : '#experiencia'}>{projectPage ? 'Arquitectura' : 'Experiencia'}</a>
+      <a href={projectPage ? '#datos' : '#habilidades'}>{projectPage ? 'Datos' : 'Stack'}</a>
+    </nav>
+    <a class="header-contact" href="#contacto">Hablemos <Icon name="diagonal" size={16} /></a>
+  </div>
+</header>

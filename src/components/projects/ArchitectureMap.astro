@@ -1,0 +1,35 @@
+---
+import type { CaseStudy } from '../../data/caseStudies';
+import Icon from '../Icon.astro';
+import '../../styles/evidence-graphics.css';
+interface Props { study: CaseStudy; }
+const { study } = Astro.props;
+---
+<figure class:list={['architecture-map', `map-${study.slug}`]} data-reveal>
+  <figcaption><span class="eyebrow">ESQUEMA DEL PROYECTO</span><h3>{study.sceneTitle}</h3><p>Componentes y relaciones documentados en el repositorio.</p></figcaption>
+  {study.slug === 'raceway-rust-valvulas' && <>
+    <div class="control-priority"><Icon name="chip" size={22}/><div><strong>Protección por exceso de nivel</strong><span>D2 ON → prioridad RL4 → enclavamiento hasta D1 OFF</span></div><span class="map-tag">PRIORIDAD 1</span></div>
+    <div class="control-chain"><div class="map-node"><small>OBSERVAR</small><strong>D0–D5</strong><span>Entradas válidas / obsoletas</span></div><span class="map-connector" aria-hidden="true">→</span><div class="map-node central-node"><small>DECIDIR</small><strong>Arbitraje</strong><span>D2 · manual · ciclo · auto</span></div><span class="map-connector" aria-hidden="true">→</span><div class="map-node"><small>ACTUAR</small><strong>RL0–RL5</strong><span>Procesos compartidos</span></div></div>
+    <div class="map-caption">SECUENCIA DE DECANTACIÓN Y COSECHA</div>
+    <ol class="process-rail">{['Inicio manual', 'Llenado', 'Decantación', 'Cosecha', 'Sumidero', 'Completado'].map((label, index) => <li><span>{String(index + 1).padStart(2, '0')}</span>{label}</li>)}</ol>
+    <p class="map-footnote">D2 puede interrumpir los procesos. El esquema muestra lógica de software, no un enclavamiento eléctrico ni estados de una instalación en vivo. <a href="#fuente-readme">Ver condiciones de operación.</a></p>
+  </>}
+  {study.slug === 'raceway-rust-sensores' && <>
+    <div class="sensor-network">
+      <div class="network-instruments"><h4>INSTRUMENTOS</h4><div class="map-node"><Icon name="data" size={19}/><strong>Multiparamétrico</strong><span>8 canales · RTU · 9.600 baud</span></div><div class="map-node"><Icon name="data" size={19}/><strong>Hach SC1000</strong><span>5 canales · RTU · 19.200 baud</span></div><div class="map-node"><Icon name="data" size={19}/><strong>Trilux</strong><span>Dispositivo serie</span></div></div>
+      <span class="map-connector" aria-hidden="true">→</span>
+      <div class="network-core"><h4>ORQUESTACIÓN / RUST</h4><div class="map-node central-node"><Icon name="chip" size={23}/><strong>DeviceManager</strong><span>Buses + caché de lecturas</span></div><div class="network-link" aria-hidden="true">↓</div><div class="map-node"><strong>StageController</strong><span>Llenar → calentar → medir → vaciar</span></div></div>
+      <span class="map-connector" aria-hidden="true">→</span>
+      <div class="network-outputs"><h4>DATOS UTILIZABLES</h4><div class="map-node"><strong>SQLite / SQLx</strong><span>Persistencia de muestras</span></div><div class="map-node"><strong>API REST</strong><span>Consulta y autenticación</span></div><div class="map-node"><strong>WebSocket</strong><span>Seguimiento de tanques</span></div></div>
+    </div>
+    <p class="map-footnote">Los 13 canales son entradas de configuración de dos dispositivos RTU, no 13 variables únicas. <a href="#fuente-devices">Ver dispositivos.</a></p>
+  </>}
+  {study.slug === 'capitalink' && <>
+    <div class="role-lanes"><div class="role-lane"><span class="role-name"><Icon name="data" size={21}/>Inversor</span><span class="map-connector" aria-hidden="true">→</span><div class="map-node"><strong>Descubrir empresas</strong><span>Filtros + ranking determinista</span></div><span class="map-connector" aria-hidden="true">→</span><div class="map-node"><strong>Perfil y conversación</strong><span>Explorar oportunidades</span></div></div><div class="role-lane"><span class="role-name"><Icon name="window" size={21}/>Fundador</span><span class="map-connector" aria-hidden="true">→</span><div class="map-node"><strong>Gestionar su empresa</strong><span>Perfil, documentos y métricas</span></div><span class="map-connector" aria-hidden="true">→</span><div class="map-node"><strong>Suscripción Stripe</strong><span>Plan vinculado a la empresa</span></div></div><div class="role-lane"><span class="role-name"><Icon name="check" size={21}/>Administración</span><span class="map-connector" aria-hidden="true">→</span><div class="map-node"><strong>Verificación</strong><span>Gestión de la plataforma</span></div><span class="map-connector" aria-hidden="true">→</span><div class="map-node"><strong>Catálogo de empresas</strong><span>Publicación y acceso por rol</span></div></div></div>
+    <div class="map-policy"><Icon name="code" size={19}/><span>FastAPI comprueba <strong>rol y propiedad</strong> antes de las operaciones. Las políticas de puntuación y permisos se aplican en el servidor.</span></div><p class="map-footnote"><a href="#fuente-app">Rutas por rol</a> · <a href="#fuente-discovery">Búsqueda</a> · <a href="#fuente-subscriptions">Suscripciones</a></p>
+  </>}
+  {study.slug === 'vixiaweb' && <>
+    <div class="web-map"><div class="web-map-interface"><div class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></div><Icon name="window" size={29}/><strong>Next.js + Material UI</strong><span>Vistas de proyectos, datos y usuarios</span><ul><li>Blooms</li><li>Raceway</li><li>Sensórica</li><li>Drones</li></ul></div><div class="network-link" aria-hidden="true">↓</div><div class="api-contracts"><div class="map-node"><small>GET</small><strong>/datos-embalses</strong><span>embalse · year · month</span></div><div class="map-node"><small>GET</small><strong>/analisis/estacional</strong><span>embalse · desde · hasta · variable</span></div><div class="map-node"><small>GET</small><strong>/datos-metricas</strong><span>embalses · files</span></div></div><div class="network-link" aria-hidden="true">↓</div><div class="map-node central-node"><Icon name="code" size={24}/><strong>FastAPI · Servicios de datos</strong><span>Validación de consulta → procesamiento → respuesta</span></div><div class="network-link" aria-hidden="true">↓</div><div class="web-map-storage"><div class="map-node"><Icon name="data" size={20}/><strong>Persistencia MySQL</strong><span>Aplicación y usuarios</span></div><div class="map-node"><Icon name="data" size={20}/><strong>Series y archivos de métricas</strong><span>Datos de los módulos de proyecto</span></div></div></div>
+    <p class="map-footnote">Rutas relativas al router de blooms, con los nombres de parámetros del código. <a href="#fuente-api">Ver contrato de la API.</a></p>
+  </>}
+</figure>

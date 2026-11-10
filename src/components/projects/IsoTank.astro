@@ -1,0 +1,17 @@
+---
+import { project } from '../../lib/isometric';
+interface Props { x: number; y: number; r: number; h: number; label: string; }
+const { x, y, r, h, label } = Astro.props;
+const [cx, cy] = project(x, y);
+const rx = r * Math.sqrt(1.5);
+const ry = r / Math.sqrt(2);
+---
+<g class="iso-tank">
+  <ellipse cx={cx} cy={cy + 5} rx={rx + 6} ry={ry + 3} fill="#000" opacity=".22" />
+  <path d={`M${cx - rx} ${cy - h}V${cy}a${rx} ${ry} 0 0 0 ${rx * 2} 0V${cy - h}Z`} class="iso-tank-wall" />
+  <ellipse cx={cx} cy={cy - h} rx={rx} ry={ry} class="iso-tank-rim" />
+  <ellipse cx={cx} cy={cy - h + 3} rx={rx - 5} ry={ry - 4} class="iso-tank-water" />
+  <ellipse cx={cx} cy={cy - h + 3} rx={rx - 14} ry={(ry - 4) * .55} fill="none" stroke="var(--case-accent)" opacity=".2" />
+  <path d={`M${cx - rx + 8} ${cy - h + 11}v${Math.max(5, h - 20)}`} stroke="var(--case-accent)" opacity=".2" stroke-width="2" />
+  <text x={cx} y={cy - h - ry - 13} text-anchor="middle" class="iso-object-label">{label}</text>
+</g>

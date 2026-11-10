@@ -1,0 +1,59 @@
+---
+import { profile } from '../data/profile';
+import interFont from '@fontsource-variable/inter/files/inter-latin-standard-normal.woff2?url';
+import displayFont from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+import '../styles/global.css';
+import '../styles/daylight.css';
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
+  structuredData?: Record<string, unknown>;
+}
+const {
+  title = `${profile.shortName} | Data Scientist · Backend & ML Engineer`,
+  description = 'Portfolio de Guillermo Bastos. Machine learning con validación temporal, pipelines Sentinel-2/3, APIs y sistemas embebidos. Explora proyectos y experiencia.',
+  ogImage = `${profile.site}/og.png`,
+  ogImageAlt = 'Guillermo Bastos Ribas · Data Scientist · Backend & ML Engineer. Avatar robótico GB–01.',
+  structuredData,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, profile.site);
+const person = {
+  '@context': 'https://schema.org', '@type': 'Person', '@id': `${profile.site}/#person`,
+  name: profile.name, url: profile.site, jobTitle: profile.role,
+  description: profile.summary, email: `mailto:${profile.email}`,
+  sameAs: [profile.github, profile.linkedin],
+  alumniOf: profile.education.map(item => ({ '@type': 'EducationalOrganization', name: item.institution })),
+  knowsAbout: [...new Set(profile.skills.flatMap(group => group.items))],
+  worksFor: { '@type': 'Organization', name: 'Universidade de Vigo' },
+};
+---
+<!doctype html>
+<html lang="es" data-theme="daylight">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#faf6ee" />
+    <meta name="color-scheme" content="light" />
+    <title>{title}</title><meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={interFont} as="font" type="font/woff2" crossorigin />
+    <meta property="og:type" content="website" /><meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content={profile.shortName} /><meta property="og:title" content={title} />
+    <meta property="og:description" content={description} /><meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content={title} /><meta name="twitter:description" content={description} /><meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData ? { '@context': 'https://schema.org', '@graph': [person, structuredData] } : person).replace(/</g, '\\u003c')} />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <slot />
+    <script>
+      import '../scripts/interactions';
+    </script>
+  </body>
+</html>

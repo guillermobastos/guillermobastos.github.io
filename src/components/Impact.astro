@@ -1,0 +1,24 @@
+---
+import { profile } from '../data/profile';
+import Icon from './Icon.astro';
+---
+<section class="impact-section" id="impacto" aria-labelledby="impact-title">
+  <div class="container">
+    <div class="impact-intro">
+      <div><p class="eyebrow"><span class="status-dot"></span> EL IMPACTO, EN CONCRETO</p><h2 id="impact-title">Del dato al sistema.<br /><span>Con evidencia detrás.</span></h2></div>
+      <p class="impact-lead">Resultados evaluados y capacidades de software que puedes comprobar en el código y los experimentos.</p>
+    </div>
+    <div class="impact-grid">
+      {profile.impact.map(item => (
+        <article class="impact-item" data-reveal>
+          <div class="impact-card-top"><span class="mono">{item.category}</span><Icon name={item.icon} size={22} /></div>
+          <p class="impact-value">{item.value}<span>{item.unit}</span></p>
+          <h3>{item.label}</h3>
+          <p class="impact-description">{item.description}</p>
+          <p class="impact-context">{item.context}</p>
+          <a href={item.href}><span>{item.project}<small>Explorar evidencia</small></span><Icon name="diagonal" size={19} /></a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

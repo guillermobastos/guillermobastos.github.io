@@ -1,0 +1,43 @@
+---
+import { hidroValidation, formatEvidence } from '../../data/caseStudies';
+import '../../styles/evidence-graphics.css';
+const reservoirs = [{ code: 'BEC', name: 'Beche', count: 410 }, { code: 'CAE', name: 'A Baxe', count: 675 }, { code: 'FOR', name: 'As Forcadas', count: 702 }];
+const domains = [{ key: 'individual', label: 'Individual' }, { key: 'global_loro', label: 'LORO' }];
+const find = (reservoir: string, strategy: string, horizon: string) => hidroValidation.find(row => row.reservoir === reservoir && row.strategy === strategy && row.horizon === horizon)!;
+---
+<div class="hydro-results" aria-label="Gráficos adicionales de resultados de HidroPronos">
+  <div class="hydro-results-heading"><p class="eyebrow">LEER LOS RESULTADOS, NO SOLO EL PROMEDIO</p><h3>Tres embalses. Distintos contextos de evaluación.</h3><p>Valores exportados de la validación de 2021 para vigilancia ≥ 2.000 células/mL. Los gráficos conservan separados embalse, horizonte y dominio de entrenamiento.</p></div>
+  <div class="hydro-results-grid">
+    <figure class="hydro-chart-card" data-reveal>
+      <figcaption><span class="chart-number">FIG. 02 / F1</span><h4>El detalle detrás del 0,901</h4><p>Los 12 contextos que forman la mediana.</p></figcaption>
+      <div class="heatmap-scroll" role="region" aria-label="Tabla de F1 por embalse, dominio y horizonte" tabindex="0">
+        <table class="hydro-heatmap"><caption class="sr-only">F1 original, redondeado a tres decimales, validación 2021.</caption><thead><tr><th scope="col">Embalse / modelo</th><th scope="col">h0</th><th scope="col">h1</th></tr></thead><tbody>{reservoirs.map(reservoir => domains.map(domain => <tr><th scope="row">{reservoir.name}<small>{domain.label}</small></th>{['h0', 'h1'].map(horizon => { const value = find(reservoir.code, domain.key, horizon).f1; return <td style={`--heat: ${value * 100}%`}><span>{formatEvidence(value, 3)}</span></td>; })}</tr>))}</tbody></table>
+      </div>
+      <div class="heatmap-key"><span>0 · F1</span><i></i><span>1 · F1</span></div>
+      <p class="chart-context">h0: fecha objetivo con información antecedente. h1: un día adicional de separación. Color y número representan la misma métrica.</p>
+    </figure>
+    <figure class="hydro-chart-card aucpr-card" data-reveal>
+      <figcaption><span class="chart-number">FIG. 03 / AUCPR</span><h4>Discriminación y transferencia</h4><p>Comparación individual frente a LORO, sin recortar el eje 0–1.</p></figcaption>
+      <fieldset class="horizon-controls"><legend>Horizonte de evaluación</legend><label><input type="radio" name="aucpr-horizon" value="h0" checked/><span>h0 · misma fecha</span></label><label><input type="radio" name="aucpr-horizon" value="h1"/><span>h1 · +1 día</span></label></fieldset>
+      {['h0', 'h1'].map(horizon => <div class={`aucpr-horizon horizon-${horizon}`}>
+        <svg viewBox="0 0 470 255" role="img" aria-labelledby={`aucpr-title-${horizon}`}>
+          <title id={`aucpr-title-${horizon}`}>AUCPR {horizon} por embalse, individual y LORO, validación 2021.</title>
+          {[0, .25, .5, .75, 1].map(tick => <g><path d={`M${85 + tick * 335} 24v173`} class="plot-grid"/><text x={85 + tick * 335} y="223" text-anchor="middle" class="plot-tick">{formatEvidence(tick, tick === 0 || tick === 1 ? 0 : 2)}</text></g>)}
+          {reservoirs.map((reservoir, i) => { const individual = find(reservoir.code, 'individual', horizon).aucpr; const global = find(reservoir.code, 'global_loro', horizon).aucpr; const y = 53 + i * 65; return <g><text x="8" y={y + 5} class="plot-label">{reservoir.code}</text><path d={`M${85 + individual * 335} ${y - 5}L${85 + global * 335} ${y + 8}`} class="plot-pair"/><circle cx={85 + individual * 335} cy={y - 5} r="6" class="plot-individual"/><path d={`m${85 + global * 335} ${y + 1} 7 7-7 7-7-7Z`} class="plot-global"/></g>; })}
+        </svg>
+        <table class="aucpr-values"><caption class="sr-only">Valores AUCPR de {horizon}</caption><thead><tr><th scope="col">Embalse</th><th scope="col">Individual</th><th scope="col">LORO</th></tr></thead><tbody>{reservoirs.map(reservoir => <tr><th scope="row">{reservoir.name}</th>{domains.map(domain => <td>{formatEvidence(find(reservoir.code, domain.key, horizon).aucpr, 3)}</td>)}</tr>)}</tbody></table>
+      </div>)}
+      <div class="plot-legend"><span><i class="legend-circle"></i>Individual</span><span><i class="legend-diamond"></i>Global LORO</span></div>
+    </figure>
+    <figure class="hydro-chart-card cohort-chart" data-reveal>
+      <figcaption><span class="chart-number">FIG. 04 / COHORTE</span><h4>De dónde proceden las observaciones</h4><p>Distribución de los 1.787 embalse-días del análisis BEC/CAE/FOR.</p></figcaption>
+      <div class="cohort-content"><div class="cohort-ring" style={`background: conic-gradient(#a55e32 0 ${410 / 1787 * 100}%, #8a9270 ${410 / 1787 * 100}% ${1085 / 1787 * 100}%, #d4ad72 ${1085 / 1787 * 100}% 100%)`} role="img" aria-label="Beche: 410 días; A Baxe: 675 días; As Forcadas: 702 días."><span><strong>1.787</strong><small>embalse-días</small></span></div><ul>{reservoirs.map((reservoir, i) => <li><i class={`cohort-color-${i}`}></i><span>{reservoir.name}<small>{reservoir.code}</small></span><strong>{reservoir.count}</strong></li>)}</ul></div>
+      <p class="chart-context">Recuento de fechas observadas, no cobertura diaria completa. Cecebre no forma parte de esta cohorte de modelado.</p>
+    </figure>
+    <figure class="hydro-chart-card validation-design" data-reveal>
+      <figcaption><span class="chart-number">ESQUEMA / VALIDACIÓN</span><h4>El futuro se reserva para validar</h4><p>Las decisiones de selección se separan del año de validación primaria.</p></figcaption>
+      <ol><li><span>ANTES DE 2017</span><strong>Cribado y preparación</strong><p>Variables y búsqueda sobre el historial anterior.</p></li><li><span>2017 — 2020</span><strong>Selección temporal</strong><p>Comparación de modelos y elección del umbral.</p></li><li><span>2021</span><strong>Validación primaria</strong><p>Evaluación con modelo y umbral ya fijados.</p></li></ol>
+    </figure>
+  </div>
+  <p class="hydro-evidence-source">Fuentes: <a href="#fuente-validation">metricas_validacion.csv</a>, <a href="#fuente-cohort">tabla_prevalencia_wilson.csv</a> y <a href="#fuente-manifest">manifiesto del experimento</a>. No se han dibujado intervalos de confianza ni curvas de predicción que no figuran en este extracto.</p>
+</div>

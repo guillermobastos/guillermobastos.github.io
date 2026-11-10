@@ -1,0 +1,24 @@
+---
+import { projects } from '../data/profile';
+import Icon from './Icon.astro';
+import ProjectCard from './ProjectCard.astro';
+const repositoryProjects = projects.filter(project => project.repository);
+const appliedProjects = projects.filter(project => !project.repository);
+---
+<section class="section container" id="proyectos" aria-labelledby="projects-title">
+  <div class="section-heading" data-reveal><div><p class="eyebrow"><span class="section-index">01 /</span> PROYECTOS SELECCIONADOS</p><h2 id="projects-title">Problemas reales.<br /><span class="text-muted">Soluciones de extremo a extremo.</span></h2></div><p class="section-description">Modelos, APIs y hardware.<br />El valor está en conectarlos.</p></div>
+  <p class="repository-intro"><Icon name="github" size={16} /> {repositoryProjects.length} repositorios · Del enfoque técnico al código.</p>
+  <div class="projects-grid repository-projects">
+    {repositoryProjects.map(project => <ProjectCard project={project} />)}
+  </div>
+  <details class="additional-projects">
+    <summary>
+      <span>Más proyectos aplicados <span class="additional-count">{appliedProjects.length}</span></span>
+      <span class="additional-hint">Teledetección, agua e IoT <Icon name="plus" size={19} /></span>
+    </summary>
+    <div class="projects-grid">
+      {appliedProjects.map(project => <ProjectCard project={project} reveal={false} />)}
+    </div>
+  </details>
+  <p class="projects-footnote"><span class="status-dot"></span> Más allá del notebook: datos → modelo → integración → decisión.</p>
+</section>

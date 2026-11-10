@@ -1,0 +1,83 @@
+---
+import Icon from './Icon.astro';
+---
+<figure class="robot-avatar" data-avatar data-in-view="false">
+  <div class="avatar-heading"><span class="mono">GUILLERMO / EXPLORADOR DE DATOS</span><span class="avatar-status"><i></i> GB–01</span></div>
+  <div class="avatar-stage">
+    <svg class="robot-svg" viewBox="0 0 640 560" role="img" aria-labelledby="robot-title robot-description">
+      <title id="robot-title">GB–01, avatar robótico de Guillermo Bastos</title>
+      <desc id="robot-description">Un pequeño robot explorador de color ocre, con ojos binoculares expresivos, orugas y una placa GB. Su identidad representa el trabajo de Guillermo entre datos, modelos y hardware.</desc>
+      <defs>
+        <linearGradient id="robot-body-paint" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5c56d"/><stop offset="1" stop-color="#c47728"/></linearGradient>
+        <linearGradient id="robot-metal" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c8c4b8"/><stop offset="1" stop-color="#878a81"/></linearGradient>
+        <linearGradient id="robot-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#344e50"/><stop offset="1" stop-color="#122c30"/></linearGradient>
+        <radialGradient id="avatar-sun"><stop stop-color="#f1d4a3" stop-opacity=".7"/><stop offset="1" stop-color="#f1d4a3" stop-opacity="0"/></radialGradient>
+        <pattern id="avatar-paper" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="#ab8050" opacity=".16"/></pattern>
+      </defs>
+      <circle cx="328" cy="272" r="227" fill="url(#avatar-sun)"/>
+      <circle cx="328" cy="272" r="189" fill="none" stroke="#d5b88a" stroke-width="1" stroke-dasharray="3 9"/>
+      <path d="M63 440 323 293 584 440 324 547Z" fill="#eee1ca"/>
+      <path d="m63 440 261 107 260-107v10L324 557 63 450Z" fill="#d9c5a4"/>
+      <path d="M95 440 324 311 551 440 324 532Z" fill="url(#avatar-paper)"/>
+      <ellipse cx="325" cy="452" rx="145" ry="34" fill="#684825" opacity=".12" class="robot-shadow"/>
+      <g class="robot-character">
+        <g class="robot-tracks" stroke="#564d3d" stroke-width="3">
+          <path d="M179 366q-31 5-31 43t34 43h70q25-4 25-39t-24-47Z" fill="#6d6b58"/>
+          <path d="M383 366q-29 8-29 43t31 43h70q25-5 25-39t-26-47Z" fill="#6d6b58"/>
+          <path d="M179 381q-18 8-17 29t21 26h58q21-3 20-26t-20-29Zm204 0q-17 8-16 29t20 26h58q21-3 20-26t-20-29Z" fill="#aaa48b"/>
+          {[184, 212, 239, 389, 417, 445].map(x => <g><circle cx={x} cy="409" r="14" fill="#777963"/><circle cx={x} cy="409" r="5" fill="#c2b99d"/></g>)}
+          {[0, 1, 2, 3, 4, 5].map(i => <><path d={`M${175 + i * 15} 368v12m0 56v13M${380 + i * 15} 368v12m0 56v13`} stroke="#474b3e" stroke-width="5"/></>)}
+        </g>
+        <g class="robot-arm robot-arm-left">
+          <path d="m235 304-46 18-15 52" fill="none" stroke="#797d72" stroke-width="17" stroke-linejoin="round"/>
+          <circle cx="191" cy="322" r="15" fill="#a4a596" stroke="#5a6159" stroke-width="3"/>
+          <path d="m160 367-6 27 15 8m15-36 7 27-15 11" fill="none" stroke="#a5a698" stroke-width="9" stroke-linecap="round"/>
+        </g>
+        <g class="robot-arm robot-arm-right">
+          <path d="m407 305 49-14 26-44" fill="none" stroke="#85887b" stroke-width="17" stroke-linejoin="round"/>
+          <circle cx="455" cy="291" r="15" fill="#a4a596" stroke="#5a6159" stroke-width="3"/>
+          <path d="m471 246-2-25 14-10m15 39 8-22-10-17" fill="none" stroke="#b6b5a0" stroke-width="9" stroke-linecap="round"/>
+        </g>
+        <path d="m230 267 148-19 48 32v114l-51 23-146-31Z" fill="url(#robot-body-paint)" stroke="#8e5c27" stroke-width="2"/>
+        <path d="m378 248 48 32v114l-51 23Z" fill="#b67831"/>
+        <path d="m230 267 148-19 48 32-155 22Z" fill="#f5d48b" stroke="#a77639" stroke-width="1.5"/>
+        <path d="m249 307 108-1v73l-108-12Z" fill="#edd49b" stroke="#9c6d35" stroke-width="2"/>
+        <path d="M260 319h83v28h-83Z" fill="#3e514b" rx="3"/>
+        <text x="271" y="339" fill="#dfedce" font-family="monospace" font-size="17" letter-spacing="2">GB–01</text>
+        <text x="260" y="365" fill="#694a2e" font-family="monospace" font-size="9" letter-spacing="1.2">DATOS · CÓDIGO</text>
+        <circle cx="344" cy="363" r="4" fill="#a8512a"/>
+        <path d="m390 315 22-5m-22 17 22-5m-22 17 22-5m-22 17 22-5" stroke="#795128" stroke-width="4"/>
+        {[[240, 280], [365, 270], [240, 377], [365, 393]].map(([x, y]) => <circle cx={x} cy={y} r="3" fill="#78542d"/>)}
+        <g class="robot-neck"><path d="M307 267v-54m18 53v-51" stroke="#777e70" stroke-width="10"/><path d="M297 245h41m-41-14h41" stroke="#bcbba5" stroke-width="6"/></g>
+        <g class="robot-head">
+          <path d="M308 177v-43l26-14" fill="none" stroke="#8a8c77" stroke-width="6"/>
+          <circle class="robot-antenna" cx="335" cy="120" r="7" fill="#d27036"/>
+          <path d="m190 173 84-17 41 22 41-21 87 18 13 54-41 32-65-2-35-27-36 26-65-2-37-32Z" fill="url(#robot-metal)" stroke="#656f62" stroke-width="3" stroke-linejoin="round"/>
+          <path d="m190 173 84-17 41 22-17 12-85-1Zm125 5 41-21 87 18-22 15-86 0Z" fill="#dfd9bb"/>
+          <g class="robot-eye robot-eye-left">
+            <path d="m213 190 59-13 29 17-6 34-22 18-50-8-18-22Z" fill="#293d3d" stroke="#687366" stroke-width="4"/>
+            <ellipse cx="253" cy="211" rx="30" ry="27" fill="url(#robot-glass)"/>
+            <g class="robot-pupils"><circle cx="255" cy="211" r="17" fill="#789e93"/><circle cx="255" cy="211" r="10" fill="#183637"/><circle cx="247" cy="202" r="6" fill="#f5fbeb"/><circle cx="263" cy="220" r="2.5" fill="#bfdfcf"/></g>
+            <path class="robot-eyelid" d="M216 211h78" stroke="#87927d" stroke-width="0"/>
+          </g>
+          <g class="robot-eye robot-eye-right">
+            <path d="m335 192 26-15 60 14 10 25-17 22-51 8-24-18Z" fill="#293d3d" stroke="#687366" stroke-width="4"/>
+            <ellipse cx="382" cy="211" rx="30" ry="27" fill="url(#robot-glass)"/>
+            <g class="robot-pupils"><circle cx="380" cy="211" r="17" fill="#789e93"/><circle cx="380" cy="211" r="10" fill="#183637"/><circle cx="372" cy="202" r="6" fill="#f5fbeb"/><circle cx="388" cy="220" r="2.5" fill="#bfdfcf"/></g>
+            <path class="robot-eyelid" d="M343 211h78" stroke="#87927d" stroke-width="0"/>
+          </g>
+          <path d="m310 222 7 7 8-8" stroke="#596e61" stroke-width="3" fill="none"/>
+        </g>
+      </g>
+      <g class="avatar-data-orbit" fill="none" stroke="#c29254" stroke-width="1.5"><path d="m115 248 31-18 31 18-31 18Zm-9 12 40 23 41-23"/><circle cx="505" cy="171" r="21"/><path d="m495 171 8 8 13-15"/></g>
+    </svg>
+    <div class="avatar-note note-python"><Icon name="code" size={16}/><span>Python · ML · Backend</span></div>
+    <div class="avatar-note note-hardware"><Icon name="chip" size={16}/><span>Rust + mundo real</span></div>
+  </div>
+  <figcaption><div><strong>GB–01</strong><span>Mi versión explorador: curioso por los datos, cerca del hardware.</span></div><button class="avatar-greet" type="button" aria-label="Saludar al avatar GB–01" aria-pressed="false"><Icon name="plus" size={17}/> Saludar</button></figcaption>
+</figure>
+
+<script>
+  import { initAvatar } from '../scripts/avatar';
+  initAvatar();
+</script>

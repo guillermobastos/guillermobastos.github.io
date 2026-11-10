@@ -1,0 +1,36 @@
+---
+import { formatEvidence, type CaseStudy } from '../../data/caseStudies';
+import Icon from '../Icon.astro';
+import HidroResults from './HidroResults.astro';
+interface Props { study: CaseStudy; }
+const { study } = Astro.props;
+const chart = study.chart;
+const metricLabels: Record<string, string> = { none: 'sin métricas', basic: 'métricas básicas', full: 'métricas completas' };
+---
+<section class="case-section" id="datos" aria-labelledby="data-title">
+  <div class="case-section-heading">
+    <div><p class="eyebrow"><span class="section-index">02 /</span> EVIDENCIA Y DATOS</p><h2 id="data-title">{study.slug === 'hidropronos' ? 'Resultados que se pueden contrastar.' : 'Configuración y decisiones verificables.'}</h2></div>
+    <a class="case-data-download" href={`/proyectos/${study.slug}/datos.json`} download={`${study.slug}-evidencia.json`}><Icon name="download" size={16} /> Descargar datos JSON</a>
+  </div>
+  <figure class="evidence-chart">
+    <div class="evidence-chart-heading"><div><h3>{chart.title}</h3><p>{chart.description}</p></div><span class="evidence-badge">SNAPSHOT DEL REPOSITORIO</span></div>
+    {study.slug === 'hidropronos' && <div class="evidence-legend">{chart.series.map((name, index) => <span><i class={`series-${index}`}></i>{name}</span>)}</div>}
+    {study.slug === 'capitalink' ? (
+      <div class="case-pricing-grid">
+        {chart.rows.map((row, index) => <article class="case-price-card"><h4>{row.label}</h4><p>{formatEvidence(row.values[0])}<span>€</span></p><small>{study.table.rows[index][1]} imágenes · {metricLabels[study.table.rows[index][3]]}</small></article>)}
+      </div>
+    ) : study.slug === 'hidropronos' ? <><div class="evidence-plot">
+      {chart.rows.map(row => <div class="evidence-row"><h4>{row.label}</h4><div class="evidence-series">{row.values.map((value, index) => <div class="evidence-bar-row"><span class="sr-only">{chart.series[index]}:</span><div class="evidence-bar-track" aria-hidden="true"><span class:list={['evidence-bar-fill', `series-${index}`]} style={`--bar-width: ${value / chart.max * 100}%`}></span></div><span class="evidence-bar-value">{formatEvidence(value, chart.decimals)}{chart.unit}</span></div>)}</div></div>)}
+    </div>
+    <div class="evidence-scale" aria-hidden="true"><span>0</span><span>{formatEvidence(chart.max, chart.decimals)}{chart.unit}</span></div></> : <div class="configuration-note"><Icon name="code" size={27}/><p>El esquema describe componentes y contratos implementados. La tabla siguiente conserva los nombres y valores de la configuración original.</p></div>}
+    <figcaption><p>{chart.context}</p><a href={`#fuente-${chart.source}`}>Ver fuente y criterio de cálculo <Icon name="arrow" size={15} /></a></figcaption>
+  </figure>
+  <div class="evidence-table-card">
+    <h3 id="evidence-table-title">{study.table.title}</h3>
+    <div class="evidence-table-scroll" role="region" aria-labelledby="evidence-table-title" tabindex="0">
+      <table><caption class="sr-only">{study.table.title}</caption><thead><tr>{study.table.columns.map(column => <th scope="col">{column}</th>)}</tr></thead><tbody>{study.table.rows.map(row => <tr>{row.map((cell, index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>)}</tbody></table>
+    </div>
+    <p class="evidence-table-note">{study.table.note} <a href={`#fuente-${study.table.source}`}>Consultar fuente.</a></p>
+  </div>
+  {study.slug === 'hidropronos' && <HidroResults />}
+</section>

@@ -1,0 +1,8 @@
+---
+import { profile } from '../data/profile';
+import Icon from './Icon.astro';
+---
+<section class="section container" id="habilidades" aria-labelledby="skills-title">
+  <div class="section-heading" data-reveal><div><p class="eyebrow"><span class="section-index">03 /</span> CAJA DE HERRAMIENTAS</p><h2 id="skills-title">El stack sigue al problema.</h2></div><p class="section-description">Herramientas que uso para analizar,<br />construir y conectar.</p></div>
+  <div class="skills-grid">{profile.skills.map((group, i) => <article class="skill-card" data-reveal><div class="skill-card-top"><Icon name={group.icon} size={25}/><span class="mono">0{i + 1}</span></div><h3>{group.name}</h3><p>{group.description}</p><ul class="tags">{group.items.map(item => <li>{item}</li>)}</ul></article>)}</div>
+</section>

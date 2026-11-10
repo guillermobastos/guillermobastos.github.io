@@ -1,0 +1,13 @@
+---
+import { points, project } from '../../lib/isometric';
+interface Props { x: number; y: number; z?: number; w: number; d: number; h: number; label?: string; labelDx?: number; labelDy?: number; tone?: 'default' | 'accent' | 'water' | 'glass'; }
+const { x, y, z = 0, w, d, h, label, labelDx = 0, labelDy = 0, tone = 'default' } = Astro.props;
+const labelPosition = project(x + w / 2, y + d / 2, z + h + 13);
+---
+<g class:list={['iso-prism', `iso-tone-${tone}`]}>
+  <polygon class="iso-face-left" points={points([[x, y + d, z], [x + w, y + d, z], [x + w, y + d, z + h], [x, y + d, z + h]])} />
+  <polygon class="iso-face-right" points={points([[x + w, y, z], [x + w, y + d, z], [x + w, y + d, z + h], [x + w, y, z + h]])} />
+  <polygon class="iso-face-top" points={points([[x, y, z + h], [x + w, y, z + h], [x + w, y + d, z + h], [x, y + d, z + h]])} />
+  <slot />
+  {label && <text x={labelPosition[0] + labelDx} y={labelPosition[1] + labelDy} class="iso-object-label" text-anchor="middle">{label}</text>}
+</g>

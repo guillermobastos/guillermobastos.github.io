@@ -1,0 +1,72 @@
+---
+import type { Project } from '../data/profile';
+interface Props { type: Project['visual']; }
+const { type } = Astro.props;
+const labels = {
+  satellite: ['OBSERVACIÓN SATELITAL', 'SENTINEL / ML'],
+  spectral: ['ANÁLISIS ESPECTRAL', 'SENSOR / API'],
+  water: ['CALIDAD DEL AGUA', '7 VARIABLES / SMS'],
+  algae: ['EVOLUCIÓN CELULAR', 'SENSORES / LUZ'],
+  forecast: ['VALIDACIÓN TEMPORAL', 'OBSERVACIÓN / MODELO'],
+  control: ['CONTROL DE PROCESOS', 'ESTADO / ACTUACIÓN'],
+  sensors: ['ADQUISICIÓN DE DATOS', 'MODBUS / API'],
+  finance: ['PLATAFORMA FINANCIERA', 'EMPRESAS / INVERSORES'],
+  platform: ['PRODUCTO FULL-STACK', 'INTERFAZ / DATOS'],
+};
+---
+<div class:list={['project-visual', `visual-${type}`]} aria-hidden="true">
+  <div class="visual-topline"><span>{labels[type][0]}</span><span>↗</span></div>
+  <svg viewBox="0 0 560 240" fill="none">
+    {type === 'forecast' && <>
+      {[70, 120, 170].map(y => <path d={`M48 ${y}h464`} stroke="currentColor" opacity=".1" />)}
+      {[0, 1, 2, 3].map(i => <g><rect x={56 + i * 115} y={155 - i * 29} width="76" height="17" rx="3" fill="currentColor" opacity=".15"/><rect x={136 + i * 115} y={155 - i * 29} width="26" height="17" rx="3" fill="currentColor" opacity=".65"/></g>)}
+      <path d="M60 145C105 135 118 157 157 118S205 135 250 94 310 105 355 66 416 72 474 39" stroke="currentColor" stroke-width="2" />
+      <path d="M49 198h462" stroke="currentColor" opacity=".45"/><text x="49" y="219" fill="currentColor" font-size="9" font-family="monospace">PASADO</text><text x="455" y="219" fill="currentColor" font-size="9" font-family="monospace">FUTURO</text>
+    </>}
+    {type === 'control' && <>
+      <path d="M105 73h80v87h-80zm270 0h80v87h-80z" stroke="currentColor" opacity=".6"/>
+      <path d="M106 126h78v33h-78zm270-21h78v54h-78z" fill="currentColor" opacity=".12"/>
+      <path d="M185 115h65m60 0h65M145 160v31h270v-31" stroke="currentColor" opacity=".5" stroke-width="2"/>
+      <path d="m263 100 34 30v-30l-34 30z" stroke="currentColor" fill="currentColor" fill-opacity=".1"/>
+      <circle cx="145" cy="90" r="5" fill="currentColor"/><circle cx="415" cy="90" r="5" stroke="currentColor"/>
+      <path d="M280 100V73m-14 0h28" stroke="currentColor"/><text x="126" y="59" fill="currentColor" font-size="10" font-family="monospace">INPUT</text><text x="394" y="59" fill="currentColor" font-size="10" font-family="monospace">OUTPUT</text>
+    </>}
+    {type === 'sensors' && <>
+      <path d="M100 75h110v45h70m-180 0h180m-180 45h110v-45m70 0h90" stroke="currentColor" opacity=".4"/>
+      {[75, 120, 165].map(y => <g><circle cx="100" cy={y} r="12" stroke="currentColor"/><circle cx="100" cy={y} r="4" fill="currentColor" opacity=".6"/></g>)}
+      <rect x="370" y="74" width="100" height="92" rx="6" stroke="currentColor" opacity=".65"/>
+      {[0, 1, 2, 3].map(i => <path d={`M386 ${95 + i * 17}h${[47, 66, 37, 57][i]}`} stroke="currentColor" opacity={.3 + i * .15} stroke-width="3"/>)}
+      <circle cx="280" cy="120" r="20" stroke="currentColor"/><text x="270" y="125" fill="currentColor" font-size="13" font-family="monospace">RS</text>
+    </>}
+    {type === 'finance' && <>
+      <path d="M120 120h95m130 0h95M145 120V70h270v50M145 120v50h270v-50" stroke="currentColor" opacity=".25"/>
+      <rect x="223" y="68" width="114" height="104" rx="9" stroke="currentColor" opacity=".7"/>
+      <path d="m246 143 23-24 18 11 29-33m-15 0h15v15" stroke="currentColor" stroke-width="2"/>
+      {[120, 440].map(x => <g><circle cx={x} cy="120" r="27" fill="currentColor" fill-opacity=".06" stroke="currentColor"/><circle cx={x} cy="112" r="7" stroke="currentColor"/><path d={`M${x - 12} 135q12-20 24 0`} stroke="currentColor"/></g>)}
+    </>}
+    {type === 'platform' && <>
+      <rect x="90" y="42" width="380" height="160" rx="7" stroke="currentColor" opacity=".6"/><path d="M90 70h380m-304 0v132" stroke="currentColor" opacity=".3"/>
+      {[106, 118, 130].map(x => <circle cx={x} cy="56" r="2" fill="currentColor" opacity=".7"/>)}
+      {[91, 109, 127, 145].map(y => <path d={`M106 ${y}h42`} stroke="currentColor" opacity=".25" stroke-width="3"/>)}
+      {[0, 1, 2].map(i => <rect x={185 + i * 87} y="87" width="72" height="35" rx="3" fill="currentColor" opacity=".1"/>)}
+      <path d="m187 176 37-12 34 5 39-25 38 9 47-19 51 6" stroke="currentColor" stroke-width="2"/>
+    </>}
+    {type === 'satellite' && <>
+      {Array.from({ length: 13 }, (_, i) => <path d={`M${100 - i * 11} ${110 + i * 4} C${180 - i * 5} ${5 - i * 3} ${250 + i * 5} ${10 - i * 5} ${310 + i * 8} ${70 - i * 3} S${420 + i * 8} ${100 + i * 6} ${430 + i * 10} ${160 + i * 4} S${240 - i * 2} ${250 + i * 4} ${150 - i * 7} ${190 + i * 5} Z`} stroke="currentColor" opacity={.25 + i * .035} />)}
+      <path d="M280 75v90m-45-45h90" stroke="currentColor" opacity=".7"/><circle cx="280" cy="120" r="6" stroke="currentColor"/>
+    </>}
+    {type === 'spectral' && <>
+      {[50, 95, 140, 185].map(y => <path d={`M40 ${y}h480`} stroke="currentColor" opacity=".1"/>)}
+      <path d="M40 180C80 180 80 150 110 155S150 175 180 120 215 145 240 85 280 40 310 90 335 85 365 125 390 70 420 105 480 155 520 145" stroke="currentColor" stroke-width="2"/>
+      <path d="M40 190C90 190 110 170 150 180S210 150 240 155 290 100 330 145 370 130 410 160 460 160 520 180" stroke="currentColor" stroke-width="1.5" opacity=".35" stroke-dasharray="5 6"/>
+      <circle cx="257" cy="61" r="5" fill="currentColor"/><path d="M257 73v117" stroke="currentColor" opacity=".3" stroke-dasharray="3 5"/>
+    </>}
+    {type === 'water' && <>
+      {[76, 138, 200, 262, 324, 386, 448].map((x, i) => <g><rect x={x} y="45" width="30" height="135" rx="3" fill="currentColor" opacity=".07"/><rect x={x} y={180 - [75, 105, 60, 120, 85, 100, 65][i]} width="30" height={[75, 105, 60, 120, 85, 100, 65][i]} rx="3" fill="currentColor" opacity={.35 + i * .07}/><text x={x + 15} y="205" text-anchor="middle" fill="currentColor" font-size="11" font-family="monospace">{['COD', 'ION', 'NON', 'PH', 'TEMP', 'TSS', 'TURB'][i]}</text></g>)}
+    </>}
+    {type === 'algae' && <>
+      {[[130, 120, 38], [230, 85, 25], [310, 145, 45], [410, 90, 32], [190, 175, 18], [400, 180, 16]].map(([x, y, r]) => <g><circle cx={x} cy={y} r={r + 10} stroke="currentColor" opacity=".12"/><circle cx={x} cy={y} r={r} stroke="currentColor" opacity=".55"/><circle cx={x} cy={y} r={r * .65} fill="currentColor" opacity=".08"/><circle cx={x - r * .2} cy={y - r * .2} r={r * .18} fill="currentColor" opacity=".65"/></g>)}
+    </>}
+  </svg>
+  <div class="visual-bottomline"><span>{labels[type][1]}</span><span>ILUSTRACIÓN CONCEPTUAL</span></div>
+</div>

@@ -1,0 +1,25 @@
+---
+import { profile } from '../data/profile';
+import Icon from './Icon.astro';
+import RobotAvatar from './RobotAvatar.astro';
+const [firstName, ...surnames] = profile.name.split(' ');
+---
+<section class="hero container" id="inicio" aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <p class="eyebrow"><span class="status-dot"></span> DATOS · SOFTWARE · MUNDO REAL</p>
+    <p class="hero-name">Hola, soy</p>
+    <h1 id="hero-title">{firstName}<br /><span>{surnames.join(' ')}.</span></h1>
+    <p class="hero-role">{profile.role}</p>
+    <p class="hero-description">{profile.summary}</p>
+    <ul class="hero-focus" aria-label="Áreas de trabajo"><li>ML con rigor temporal</li><li>APIs y producto</li><li>Rust y sensores</li></ul>
+    <div class="hero-actions">
+      <a href="#proyectos" class="button button-primary">Ver proyectos <Icon name="arrow" size={18} /></a>
+      <a href={profile.cv} download="Guillermo-Bastos-CV.pdf" class="button button-secondary">Descargar CV <Icon name="download" size={17} /></a>
+      <a href="#contacto" class="hero-contact">Contacto <Icon name="diagonal" size={16} /></a>
+    </div>
+    <div class="hero-note"><span class="tiny-cross">+</span> Actualmente en <strong>HidroPronos · Universidade de Vigo</strong></div>
+    <div class="hero-social"><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn <Icon name="diagonal" size={15}/><span class="sr-only"> (nueva pestaña)</span></a><a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub <Icon name="diagonal" size={15}/><span class="sr-only"> (nueva pestaña)</span></a></div>
+  </div>
+  <RobotAvatar />
+  <div class="hero-bottom"><span>CIENCIA DE DATOS CON MENTALIDAD DE PRODUCTO</span><a href="#impacto">Explora mi trabajo <span>↓</span></a></div>
+</section>

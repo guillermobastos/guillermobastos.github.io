@@ -1,0 +1,48 @@
+---
+import type { Project } from '../data/profile';
+import Icon from './Icon.astro';
+import ProjectVisual from './ProjectVisual.astro';
+import { caseStudies } from '../data/caseStudies';
+import IsometricScene from './projects/IsometricScene.astro';
+
+interface Props { project: Project; reveal?: boolean; }
+const { project, reveal = true } = Astro.props;
+const study = caseStudies.find(study => study.slug === project.id);
+const accent = study?.accent || '#965b31';
+---
+<article class:list={['project-card', `project-${project.id}`]} style={`--project-accent: ${accent}`} id={project.id} data-tilt data-reveal={reveal || undefined}>
+  {study ? <IsometricScene study={study} compact /> : <ProjectVisual type={project.visual} />}
+  <div class="project-body">
+    <div class="project-meta">
+      <span>{project.category}</span>
+      <span>/{project.number}</span>
+    </div>
+    <h3>{project.title}</h3>
+    <p class="project-summary">{project.summary}</p>
+    <dl class="project-story">
+      <div><dt>EL RETO</dt><dd>{project.problem}</dd></div>
+      <div><dt>LA SOLUCIÓN</dt><dd>{project.approach}</dd></div>
+      <div class="project-result"><dt>EL RESULTADO</dt><dd>{project.result}</dd></div>
+    </dl>
+    <ul class="tags" aria-label="Tecnologías">
+      {project.stack.map(item => <li>{item}</li>)}
+    </ul>
+    {project.repository && (
+      <a class="project-case-link" href={`/proyectos/${project.id}/`}>
+        <span>Explorar el proyecto<span class="sr-only">: {project.title}</span></span>
+        <Icon name="arrow" size={18} />
+      </a>
+    )}
+    {project.repository && (
+      <a class="project-repository" href={project.repository} target="_blank" rel="noopener noreferrer">
+        <Icon name="github" size={17} />
+        <span>Ver repositorio<span class="sr-only"> de {project.title} (nueva pestaña)</span></span>
+        <Icon name="diagonal" size={16} />
+      </a>
+    )}
+    <details class="technical-details">
+      <summary>Explorar enfoque técnico <Icon name="plus" size={17} /></summary>
+      <ul>{project.details.map(detail => <li>{detail}</li>)}</ul>
+    </details>
+  </div>
+</article>

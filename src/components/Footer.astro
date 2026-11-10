@@ -1,0 +1,9 @@
+---
+import { profile } from '../data/profile';
+import Icon from './Icon.astro';
+const home = Astro.url.pathname === '/' ? '' : '/';
+---
+<footer id="contacto">
+  <div class="container contact-panel" data-reveal><div><p class="eyebrow"><span class="status-dot"></span> SIGUIENTE PASO</p><h2>Los buenos proyectos<br />empiezan con una <span>conversación.</span></h2><p>¿Buscas un perfil que conecte datos, backend y producto?<br />Hablemos de lo que podemos construir.</p></div><a class="button button-primary" href={`mailto:${profile.email}`}>Hablemos <Icon name="diagonal" size={20}/></a><a class="contact-email" href={`mailto:${profile.email}`}>{profile.email}<Icon name="arrow" size={18}/></a></div>
+  <div class="container footer-bottom"><a href={`${home}#inicio`} class="wordmark" aria-label="gb. Volver al inicio">gb<span>.</span></a><p>© {new Date().getFullYear()} {profile.name}</p><nav aria-label="Redes y contacto"><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn <Icon name="diagonal" size={14}/><span class="sr-only"> (nueva pestaña)</span></a><a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub <Icon name="diagonal" size={14}/><span class="sr-only"> (nueva pestaña)</span></a><a href={`mailto:${profile.email}`}>Email <Icon name="diagonal" size={14}/></a></nav><span class="footer-built">HECHO CON ASTRO <span>✳</span></span></div>
+</footer>

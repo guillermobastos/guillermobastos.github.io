@@ -1,0 +1,11 @@
+---
+import Icon from './Icon.astro';
+import { profile } from '../data/profile';
+const { overview } = profile;
+---
+<section class="profile-overview container" aria-labelledby="profile-overview-title">
+  <div class="profile-editorial"><p class="eyebrow">MI PERFIL, EN UNA MIRADA</p><h2 id="profile-overview-title">{overview.heading}<br /><span>{overview.emphasis}</span></h2><p>{overview.description}</p><a href="#experiencia">Conocer mi trayectoria <Icon name="arrow" size={17}/></a></div>
+  <div class="profile-pillars">
+    {overview.pillars.map(pillar => <article><Icon name={pillar.icon} size={24}/><div><h3>{pillar.title}</h3><p>{pillar.description}</p></div></article>)}
+  </div>
+</section>

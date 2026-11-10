@@ -1,0 +1,77 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import Icon from '../../../components/Icon.astro';
+import IsometricScene from '../../../components/projects/IsometricScene.astro';
+import EvidencePanel from '../../../components/projects/EvidencePanel.astro';
+import ArchitectureMap from '../../../components/projects/ArchitectureMap.astro';
+import { profile, projects } from '../../../data/profile';
+import { caseStudies, sourceUrl } from '../../../data/caseStudies';
+import '../../../styles/projects.css';
+
+export const getStaticPaths = (() => caseStudies.map((study, index) => ({
+  params: { slug: study.slug },
+  props: { study, project: projects.find(project => project.id === study.slug)!, nextStudy: caseStudies[(index + 1) % caseStudies.length] },
+}))) satisfies GetStaticPaths;
+
+const { study, project, nextStudy } = Astro.props;
+const nextProject = projects.find(project => project.id === nextStudy.slug)!;
+const url = `${profile.site}/proyectos/${study.slug}/`;
+const creativeWork = {
+  '@type': 'CreativeWork', '@id': `${url}#case-study`, name: `${project.title} · Caso de estudio`,
+  description: project.summary, url, inLanguage: 'es',
+  author: { '@id': `${profile.site}/#person` },
+  image: `${url}og.png`, keywords: project.stack.join(', '),
+  citation: study.sources.map(source => sourceUrl(study, source.id)),
+  about: { '@type': 'SoftwareSourceCode', name: project.title, codeRepository: project.repository },
+};
+---
+<Layout title={`${project.title} · Proyecto | ${profile.shortName}`} description={`${project.summary} Arquitectura isométrica, datos reales y decisiones técnicas documentadas.`} ogImage={`${url}og.png`} ogImageAlt={`${project.title}: ${study.headline.replace('\n', ' ')}`} structuredData={creativeWork}>
+  <Header projectPage />
+  <main id="contenido" class:list={['case-page', `case-${study.slug}`]} style={`--case-accent: ${study.accent}`} tabindex="-1">
+    <div class="container">
+      <nav class="case-breadcrumbs" aria-label="Ruta de navegación"><a href="/">Inicio</a><span aria-hidden="true">/</span><a href="/#proyectos">Proyectos</a><span aria-hidden="true">/</span><span aria-current="page">{project.title}</span></nav>
+      <section class="case-hero" id="resumen" aria-labelledby="case-title">
+        <div class="case-hero-copy">
+          <p class="case-discipline mono">{study.discipline}</p>
+          <p class="case-project-name">{project.title}<span> / {project.number}</span></p>
+          <h1 id="case-title">{study.headline.split('\n').map((line, index) => <span class:list={{ 'case-headline-accent': index > 0 }}>{line} </span>)}</h1>
+          <p class="case-intro">{study.intro}</p>
+          <div class="case-actions"><a class="button case-button" href="#datos">Explorar los datos <Icon name="arrow" size={18}/></a><a class="button button-secondary" href={project.repository} target="_blank" rel="noopener noreferrer"><Icon name="github" size={17}/> Ver código<span class="sr-only"> (nueva pestaña)</span></a></div>
+          <div class="case-revision"><span class="status-dot"></span> REVISIÓN <code>{study.revision.slice(0, 7)}</code><span>·</span> EVIDENCIA ESTÁTICA</div>
+        </div>
+        <IsometricScene study={study} />
+      </section>
+      <section class="case-metrics" aria-label="Estadísticas verificadas del proyecto">
+        {study.metrics.map((metric, index) => <article><div class="metric-topline"><span class="mono">0{index + 1}</span><a href={`#fuente-${metric.source}`} aria-label={`Fuente de ${metric.label}`}><Icon name="diagonal" size={14}/></a></div><p class="case-metric-value">{metric.value}</p><h2>{metric.label}</h2><p>{metric.context}</p></article>)}
+      </section>
+
+      <section class="case-section" id="arquitectura" aria-labelledby="architecture-title">
+        <div class="case-section-heading"><div><p class="eyebrow"><span class="section-index">01 /</span> MAPA DEL SISTEMA</p><h2 id="architecture-title">{study.sceneTitle}</h2></div><span class="case-section-aside mono">ENTRADA → PROCESAMIENTO → SALIDA</span></div>
+        <p class="case-problem"><span>EL RETO</span>{project.problem}</p>
+        {study.slug === 'hidropronos' ? <ol class="case-architecture">{study.architecture.map((step, index) => <li><div class="architecture-number"><span>0{index + 1}</span><Icon name={['data', 'chip', 'window'][index]} size={23}/></div><h3>{step.title}</h3><p>{step.description}</p><span class="architecture-tech mono">{step.technology}</span></li>)}</ol> : <ArchitectureMap study={study} />}
+        <div class="case-stack"><span class="mono">STACK DEL PROYECTO</span><ul class="tags">{project.stack.map(technology => <li>{technology}</li>)}</ul></div>
+      </section>
+
+      <EvidencePanel study={study} />
+
+      <section class="case-section case-decisions" aria-labelledby="decisions-title">
+        <div class="case-section-heading"><div><p class="eyebrow"><span class="section-index">03 /</span> CRITERIO DE INGENIERÍA</p><h2 id="decisions-title">Las decisiones detrás del sistema.</h2></div></div>
+        <div class="case-decision-grid">{study.decisions.map((decision, index) => <article><span class="mono">D / 0{index + 1}</span><h3>{decision.title}</h3><p>{decision.description}</p></article>)}</div>
+        <blockquote class="case-takeaway"><span aria-hidden="true">↳</span><p>{study.takeaway}</p></blockquote>
+      </section>
+
+      <section class="case-section case-sources" id="fuentes" aria-labelledby="sources-title">
+        <div class="case-section-heading"><div><p class="eyebrow"><span class="section-index">04 /</span> TRAZABILIDAD</p><h2 id="sources-title">Del dato a su fuente.</h2></div><span class="case-section-aside mono">CÓDIGO Y ARTEFACTOS ORIGINALES</span></div>
+        <div class="case-source-intro"><p>Las cifras corresponden al contenido de la revisión <code>{study.revision.slice(0, 7)}</code>, consultada el <time datetime={study.reviewedAt}>{new Date(`${study.reviewedAt}T12:00:00Z`).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</time>. Los enlaces fijan el commit para conservar el contexto del análisis.</p><a href={`/proyectos/${study.slug}/datos.json`} download={`${study.slug}-evidencia.json`}>Descargar snapshot <Icon name="download" size={16}/></a></div>
+        <ol class="case-source-list">{study.sources.map((source, index) => <li id={`fuente-${source.id}`}><span class="source-number mono">[{String(index + 1).padStart(2, '0')}]</span><div><h3><a href={sourceUrl(study, source.id)} target="_blank" rel="noopener noreferrer">{source.label}<Icon name="diagonal" size={16}/><span class="sr-only"> (GitHub, nueva pestaña)</span></a></h3><p>{source.description}</p><code>{source.path}</code></div></li>)}</ol>
+        <p class="case-illustration-note">Las ilustraciones isométricas representan la arquitectura de forma conceptual. Los gráficos cuantitativos se construyen con los valores documentados arriba; la página no consulta instalaciones, pagos ni sensores en vivo.</p>
+      </section>
+
+      <nav class="case-next" aria-label="Continuar explorando"><a href="/#proyectos"><Icon name="arrow" class="back-arrow" size={18}/> Todos los proyectos</a><a class="case-next-project" href={`/proyectos/${nextStudy.slug}/`}><span><small class="mono">SIGUIENTE CASO</small><strong>{nextProject.title}</strong></span><Icon name="arrow" size={28}/></a></nav>
+    </div>
+  </main>
+  <Footer />
+</Layout>

@@ -1,0 +1,17 @@
+---
+import { profile } from '../data/profile';
+---
+<section class="section experience-section" id="experiencia" aria-labelledby="experience-title">
+  <div class="container experience-layout">
+    <div class="experience-intro" data-reveal><p class="eyebrow"><span class="section-index">02 /</span> EXPERIENCIA</p><h2 id="experience-title">Construir. <br />Aprender. <br /><span class="text-accent">Conectar.</span></h2><p>Una trayectoria entre ciencia de datos, desarrollo de producto y sistemas conectados.</p><span class="mono experience-note">2024 — ACTUALIDAD</span></div>
+    <ol class="timeline">{profile.experience.map((job, index) => <li class:list={['timeline-item', { 'is-current': index === 0 }]} data-reveal>
+      <div class="timeline-meta"><span class="mono">{job.period}</span>{index === 0 && <span class="current-badge">ACTUAL</span>}</div>
+      <h3>{job.role}</h3>
+      {(job.company || job.project) && <p class="timeline-company">{job.company}{job.company && job.project && <span> / </span>}{job.project}</p>}
+      <p class="timeline-summary">{job.summary}</p>
+      {job.achievements.length > 0 && <details class="experience-details" open={index === 0}><summary>Contribuciones técnicas</summary><ul>{job.achievements.map(text => <li>{text}</li>)}</ul></details>}
+      <ul class="tags" aria-label="Stack del puesto">{job.stack.map(item => <li>{item}</li>)}</ul>
+      {job.contract && <p class="contract">{job.contract}</p>}
+    </li>)}</ol>
+  </div>
+</section>
